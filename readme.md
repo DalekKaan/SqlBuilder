@@ -105,3 +105,22 @@ Results in
 ```sql
 SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ```
+
+### Specifying columns
+
+```php
+$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade->select([
+'Name',
+25,
+['PID', 'ParentID'],
+'SNN' => "'123-456-789 11'",
+new Column('Age > 18', 'IsAdult')
+]);
+
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
+```
