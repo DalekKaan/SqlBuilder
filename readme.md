@@ -70,3 +70,38 @@ HAVING ((count(*) > 10))
     LIMIT 5 OFFSET 2
 ```
 
+### Creating queries
+
+Create a single query to table `Users`
+
+```php
+$queryFacade = new QueryFacade(new Query("Users"));
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT * FROM Users
+```
+
+Create a query to table `Users` with alias `U`
+
+```php
+$queryFacade = new QueryFacade(new Query("Users", "U"));
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT * FROM Users AS U
+```
+
+Create a query to some subquery `Users` with alias `U`
+
+```php
+$subqueryFacade = new QueryFacade(new Query("Users", "U"));
+$queryFacade = new QueryFacade(new Query($subqueryFacade, "SQ"));
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
+```
