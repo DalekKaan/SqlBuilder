@@ -1,9 +1,9 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\ClickHouse;
 
 /**
- * "Limit by" SQL statement
+ * "Limit by" SQL statement for ClickHouse database
  */
 class LimitByStmt
 {

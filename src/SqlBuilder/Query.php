@@ -2,6 +2,8 @@
 
 namespace SqlBuilder;
 
+use SqlBuilder\ClickHouse\LimitByStmt;
+
 /**
  * Query
  */
