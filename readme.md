@@ -53,7 +53,6 @@ echo $sql;
 ```
 
 The result will look like:
-c
 ```sql
 WITH 152 AS var1,
     SomeValue AS var2,
@@ -72,36 +71,36 @@ HAVING ((count(*) > 10))
 
 ### Creating queries
 
-Create a single query to table `Users`
+Create a simple query to table `Users`:
 
 ```php
 $queryFacade = new QueryFacade(new Query("Users"));
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT * FROM Users
 ```
 
-Create a query to table `Users` with alias `U`
+Create a query to table `Users` with alias `U`:
 
 ```php
 $queryFacade = new QueryFacade(new Query("Users", "U"));
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT * FROM Users AS U
 ```
 
-Create a query to some subquery `Users` with alias `U`
+Create a query to some subquery `Users` with alias `U`:
 
 ```php
 $subqueryFacade = new QueryFacade(new Query("Users", "U"));
 $queryFacade = new QueryFacade(new Query($subqueryFacade, "SQ"));
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ```
@@ -120,7 +119,7 @@ $queryFacade->select([
 
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
 ```
@@ -144,7 +143,7 @@ $queryFacade->select([
 
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT U.Login,
        D.Name AS Department,
@@ -170,7 +169,7 @@ $queryFacade->where([
 
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN (1, '4', 5, 'str', TRUE)))
 ```
@@ -192,7 +191,7 @@ $queryFacade->select([
 
 $sql = $queryFacade->buildSql();
 ```
-Results in
+It will result in:
 ```sql
 SELECT count(*) AS Cnt, DepartmentID, PositionID FROM Users GROUP BY DepartmentID, PositionID HAVING ((count(*) > 15) OR (count(*) < 10))
 ```
