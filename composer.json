@@ -1,0 +1,23 @@
+{
+  "name": "rib/sqlbuilder",
+  "version": "0.1",
+  "authors": [
+    {
+      "name": "Alexey Seleznev",
+      "email": "rin@live.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4" : {
+      "SqlBuilder\\" : "src/SqlBuilder",
+      "tests\\" : "tests"
+    }
+  },
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "7.5.*"
+  }
+}
