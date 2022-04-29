@@ -141,3 +141,25 @@ Results in
 ```sql
 SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN (1, '4', 5, 'str', TRUE)))
 ```
+
+### Using aggregation
+
+```php
+$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade->select([
+    ['count(*)', 'Cnt'],
+    'DepartmentID',
+    'PositionID',
+])
+    ->groupBy(['DepartmentID', 'PositionID'])
+    ->having([
+        ['count(*)', '>', 15],
+        ['OR', 'count(*)', '<', 10]
+    ]);
+
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT count(*) AS Cnt, DepartmentID, PositionID FROM Users GROUP BY DepartmentID, PositionID HAVING ((count(*) > 15) OR (count(*) < 10))
+```
