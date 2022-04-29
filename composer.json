@@ -1,5 +1,6 @@
 {
   "name": "ribselezen/sqlbuilder",
+  "description": "A simple SQL builder",
   "version": "0.1",
   "authors": [
     {
