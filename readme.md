@@ -111,11 +111,11 @@ SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ```php
 $queryFacade = new QueryFacade(new Query("Users"));
 $queryFacade->select([
-'Name',
-25,
-['PID', 'ParentID'],
-'SNN' => "'123-456-789 11'",
-new Column('Age > 18', 'IsAdult')
+    'Name',
+    25,
+    ['PID', 'ParentID'],
+    'SNN' => "'123-456-789 11'",
+    new Column('Age > 18', 'IsAdult')
 ]);
 
 $sql = $queryFacade->buildSql();
@@ -123,4 +123,21 @@ $sql = $queryFacade->buildSql();
 Results in
 ```sql
 SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
+```
+
+### Adding conditions
+
+```php
+$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade->where([
+    new ConditionStmt('Age', '>', 20),
+    ['AND', 'DepartmentID', '=', 200],
+    new ConditionStmt('SomeProp', 'IN', [1, '4', 5, 'str', true])
+]);
+
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN (1, '4', 5, 'str', TRUE)))
 ```
