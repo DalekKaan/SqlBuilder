@@ -9,13 +9,20 @@ namespace SqlBuilder;
  *
  * ```php
  *  $queryFacade = new QueryFacade(new Query("Users", "U"));
+ * 
+ *  // using `WITH`
+ *  $queryFacade->with([
+ *      'var1' => '152',
+ *      'var2' => 'SomeValue',
+ *      'subQuery' => new Query("AnotherTable"),
+ *  ])
  *
  *  // select columns
- *  $queryFacade->select([
+ *  ->select([
  *      "UserID",
  *      "GroupID",
  *      new Column("count(*)", "cnt")
- *  ])
+ *  ]);
  *
  *  // joining tables
  *  ->innerJoin("Posts", "P", "P.UserID = U.ID")
@@ -30,7 +37,7 @@ namespace SqlBuilder;
  *          ['GroupID', '=', '313'],
  *          ['OR', 'GroupID', '=', '348']
  *      ]
- *  ])
+ *  ]);
  *
  *  // aggregate
  *  ->groupBy(["UserID", "GroupID"])
@@ -141,9 +148,9 @@ class QueryFacade
                 $this->query->addColumn(new Column($column[0], $column[1]));
             } else {
                 if (!is_string($alias)) {
-                    $this->query->addColumn(new Column($column, $alias));
-                } else {
                     $this->query->addColumn(new Column($column));
+                } else {
+                    $this->query->addColumn(new Column($column, $alias));
                 }
             }
         }
