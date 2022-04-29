@@ -1,6 +1,8 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\QueryPart;
+
+use SqlBuilder\Query;
 
 class JoinStmt implements IJoin
 {

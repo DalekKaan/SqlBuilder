@@ -3,10 +3,10 @@
 namespace tests\SqlBuilder;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Column;
-use SqlBuilder\ConditionStmt;
+use SqlBuilder\Facade\QueryFacade;
 use SqlBuilder\Query;
-use SqlBuilder\QueryFacade;
+use SqlBuilder\QueryPart\Column;
+use SqlBuilder\QueryPart\ConditionStmt;
 
 class QueryFacadeTest extends TestCase
 {

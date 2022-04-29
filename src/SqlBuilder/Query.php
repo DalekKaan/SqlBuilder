@@ -2,7 +2,13 @@
 
 namespace SqlBuilder;
 
-use SqlBuilder\ClickHouse\LimitByStmt;
+use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
+use SqlBuilder\QueryPart\Column;
+use SqlBuilder\QueryPart\IColumn;
+use SqlBuilder\QueryPart\ICondition;
+use SqlBuilder\QueryPart\IJoin;
+use SqlBuilder\QueryPart\OrderStmt;
+use SqlBuilder\QueryPart\WithStmt;
 
 /**
  * Query

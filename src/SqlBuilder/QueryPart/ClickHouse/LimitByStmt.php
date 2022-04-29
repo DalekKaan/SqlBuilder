@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\ClickHouse;
+namespace SqlBuilder\QueryPart\ClickHouse;
 
 /**
  * "Limit by" SQL statement for ClickHouse database

@@ -1,8 +1,16 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Facade;
 
-use SqlBuilder\ClickHouse\LimitByStmt;
+use SqlBuilder\Query;
+use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
+use SqlBuilder\QueryPart\Column;
+use SqlBuilder\QueryPart\CrossJoinStmt;
+use SqlBuilder\QueryPart\IColumn;
+use SqlBuilder\QueryPart\JoinStmt;
+use SqlBuilder\QueryPart\OrderStmt;
+use SqlBuilder\QueryPart\WithStmt;
+use SqlBuilder\SqlHelper;
 
 /**
  * Facade for query.

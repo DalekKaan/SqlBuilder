@@ -1,6 +1,9 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\QueryPart;
+
+use SqlBuilder\Query;
+use SqlBuilder\Facade\QueryFacade;
 
 /**
  * "With" SQL statement

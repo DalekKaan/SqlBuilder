@@ -3,7 +3,7 @@
 namespace tests\SqlBuilder;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\ConditionStmt;
+use SqlBuilder\QueryPart\ConditionStmt;
 use SqlBuilder\SqlHelper;
 
 class SqlHelperTest extends TestCase

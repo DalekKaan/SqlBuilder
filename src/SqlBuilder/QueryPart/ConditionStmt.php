@@ -1,6 +1,8 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\QueryPart;
+
+use SqlBuilder\SqlHelper;
 
 class ConditionStmt implements ICondition
 {

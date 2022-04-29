@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\QueryPart;
 
 /**
  * Order statement

@@ -2,6 +2,11 @@
 
 namespace SqlBuilder;
 
+use SqlBuilder\QueryPart\ConditionsGroup;
+use SqlBuilder\QueryPart\ConditionStmt;
+use SqlBuilder\QueryPart\ICondition;
+use SqlBuilder\QueryPart\SimpleCondition;
+
 /**
  * SQL helper
  */
