@@ -125,6 +125,39 @@ Results in
 SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
 ```
 
+### Joining tables
+
+```php
+$ordersSubqueryFacade = new QueryFacade(new Query("Orders"));
+$ordersSubqueryFacade->where("date BETWEEN '2021-01-01' AND '2021-01-31'");
+
+$queryFacade = new QueryFacade(new Query("Users", "U"));
+$queryFacade->select([
+    "U.Login",
+    ["D.Name", "Department"],
+    ["R.Name", "Role"],
+    ["O.ID", "OrderID"]
+])
+    ->leftJoin("Departments", "D", new ConditionStmt('U.DepartmentID', '=', 'D.ID'))
+    ->rightJoin(new Query("Roles"), "R", 'U.RoleID = R.ID')
+    ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
+
+$sql = $queryFacade->buildSql();
+```
+Results in
+```sql
+SELECT U.Login,
+       D.Name AS Department,
+       R.Name AS Role,
+       O.ID AS OrderID
+FROM Users AS U
+    LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) 
+    RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) 
+    INNER JOIN (
+        SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31'
+                             ) AS O ON (U.ID = O.UserID)
+```
+
 ### Adding conditions
 
 ```php
