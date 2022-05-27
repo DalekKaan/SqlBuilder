@@ -2,6 +2,7 @@
 
 namespace SqlBuilder;
 
+use SqlBuilder\DB\Structure\Database;
 use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
 use SqlBuilder\QueryPart\Column;
 use SqlBuilder\QueryPart\IColumn;
@@ -15,6 +16,11 @@ use SqlBuilder\QueryPart\WithStmt;
  */
 class Query
 {
+    /**
+     * Database
+     * @var Database|null 
+     */
+    protected ?Database $database = null; 
     /**
      * "WITH" statements
      * @var WithStmt[]
@@ -89,8 +95,9 @@ class Query
     /**
      * @param Query|string $from table or sub query
      * @param string|null $alias source alias
+     * @param Database|null $database database
      */
-    public function __construct($from, ?string $alias = null)
+    public function __construct($from, ?string $alias = null, ?Database $database = null)
     {
         if (is_string($from)) {
             $from = trim($from);
@@ -99,6 +106,17 @@ class Query
         if ($alias !== null) {
             $this->alias = trim($alias);
         }
+    }
+
+    /**
+     * Specify the database
+     * @param Database $database
+     * @return $this
+     */
+    public function inDatabase(Database $database):self
+    {
+        $this->database = $database;
+        return $this;
     }
 
     /**
