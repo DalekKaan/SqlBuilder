@@ -528,6 +528,7 @@ class QueryFacade
      *
      * @param $limitBy array|LimitByStmt array of "limit by" data (see example)
      * @return self
+     * @deprecated for ClickHouse only
      */
     public function limitBy($limitBy): self
     {

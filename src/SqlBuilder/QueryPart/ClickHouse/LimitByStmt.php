@@ -4,6 +4,7 @@ namespace SqlBuilder\QueryPart\ClickHouse;
 
 /**
  * "Limit by" SQL statement for ClickHouse database
+ * @deprecated specific databases support should be removed
  */
 class LimitByStmt
 {

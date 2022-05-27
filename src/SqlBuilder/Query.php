@@ -71,6 +71,7 @@ class Query
     /**
      * "Limit by" statements
      * @var string|null
+     * @deprecated for ClickHouse only
      */
     protected ?string $limitBy = null;
 
@@ -185,6 +186,7 @@ class Query
      * Set "limit by" statement
      * @param string|LimitByStmt $limitByStmt
      * @return self
+     * @deprecated for ClickHouse Only
      */
     public function setLimitBy(string $limitByStmt): self
     {
