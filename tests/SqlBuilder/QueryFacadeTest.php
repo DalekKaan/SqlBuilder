@@ -47,6 +47,36 @@ class QueryFacadeTest extends TestCase
     }
 
     /**
+     * Test create facade with empty query
+     * @return void
+     */
+    public function testCreateSampleQuery(): void {
+        $facade = new QueryFacade(new Query("ExampleTable"));
+        $this->assertSame(
+            "SELECT * FROM ExampleTable",
+            $facade->buildSql()
+        );
+        
+        $facade = new QueryFacade(new Query("ExampleTable", "ET"));
+        $this->assertSame(
+            "SELECT * FROM ExampleTable AS ET",
+            $facade->buildSql()
+        );
+        
+        $facade = QueryFacade::newQuery("ExampleTable");
+        $this->assertSame(
+            "SELECT * FROM ExampleTable",
+            $facade->buildSql()
+        );
+
+        $facade = QueryFacade::newQuery("ExampleTable", "ET");
+        $this->assertSame(
+            "SELECT * FROM ExampleTable AS ET",
+            $facade->buildSql()
+        );
+    }
+
+    /**
      * Test WITH
      */
     public function testWith(): void

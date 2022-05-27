@@ -69,6 +69,16 @@ class QueryFacade
     protected Query $query;
 
     /**
+     * Create facade with new query
+     * @param Query|string $from table or sub query
+     * @param string|null $alias source alias
+     * @return static
+     */
+    public static function newQuery($from, string $alias = null): self {
+        return new self(new Query($from, $alias));
+    }
+
+    /**
      * @param Query $query query
      */
     public function __construct(Query $query)
