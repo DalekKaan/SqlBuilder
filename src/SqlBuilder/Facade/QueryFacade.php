@@ -4,7 +4,6 @@ namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\Query;
-use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Column\IColumn;
 use SqlBuilder\QueryPart\Join\CrossJoinStmt;
@@ -166,12 +165,10 @@ class QueryFacade
                 $this->query->addColumn($column);
             } else if (is_array($column)) {
                 $this->query->addColumn(new Column($column[0], $column[1]));
+            } else if (!is_string($alias)) {
+                $this->query->addColumn(new Column($column));
             } else {
-                if (!is_string($alias)) {
-                    $this->query->addColumn(new Column($column));
-                } else {
-                    $this->query->addColumn(new Column($column, $alias));
-                }
+                $this->query->addColumn(new Column($column, $alias));
             }
         }
         return $this;
@@ -491,64 +488,6 @@ class QueryFacade
     public function where($conditions): self
     {
         $this->query->setWhere(SqlHelper::makeCondition($conditions));
-        return $this;
-    }
-
-    /**
-     * Add columns to `LIMIT BY` statement
-     *
-     * **Example #1:**
-     *
-     * PHP
-     * ```php
-     * $queryFacade->limitBy([10, "UserID"]);
-     * ```
-     *
-     * Generated SQL
-     * ```sql
-     *  ...
-     *  LIMIT 10 BY UserID
-     * ```
-     *
-     * **Example #2:**
-     *
-     * PHP
-     * ```php
-     * $queryFacade->limitBy([10, ["UserID", "GroupID"], 50]);
-     * ```
-     *
-     * Generated SQL
-     * ```sql
-     *  ...
-     *  LIMIT 5 OFFSET 50 BY UserID, GroupID
-     * ```
-     *
-     * **Example #3:**
-     *
-     * PHP
-     * ```php
-     * $queryFacade->limitBy(new LimitByStmt(5, "UserID"));
-     * ```
-     *
-     * Generated SQL
-     * ```sql
-     *  ...
-     *  LIMIT 5 BY UserID
-     * ```
-     *
-     * @param $limitBy array|LimitByStmt array of "limit by" data (see example)
-     * @return self
-     * @deprecated for ClickHouse only
-     */
-    public function limitBy($limitBy): self
-    {
-        if ($limitBy instanceof LimitByStmt) {
-            $this->query->setLimitBy($limitBy);
-        } elseif (count($limitBy) === 2) {
-            $this->query->setLimitBy(new LimitByStmt($limitBy[0], $limitBy[1]));
-        } elseif (count($limitBy) === 3) {
-            $this->query->setLimitBy(new LimitByStmt($limitBy[0], $limitBy[1], $limitBy[2]));
-        }
         return $this;
     }
 

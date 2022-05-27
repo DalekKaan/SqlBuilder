@@ -2,7 +2,6 @@
 
 namespace SqlBuilder;
 
-use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Column\IColumn;
 use SqlBuilder\QueryPart\Condition\ICondition;
@@ -183,18 +182,6 @@ class Query
     }
 
     /**
-     * Set "limit by" statement
-     * @param string|LimitByStmt $limitByStmt
-     * @return self
-     * @deprecated for ClickHouse Only
-     */
-    public function setLimitBy(string $limitByStmt): self
-    {
-        $this->limitBy = $limitByStmt;
-        return $this;
-    }
-
-    /**
      * Set limit
      * @param int $limit
      * @return self
@@ -238,17 +225,10 @@ class Query
         $sqlParts['select'] = "SELECT " . $columnsStatement;
 
         // prepare source
-        if ($this->source instanceof self) {
-            $fromStatement = "({$this->source})";
-        } elseif (is_string($this->source) && strpos($this->source, " ") !== false) {
-            $fromStatement = "({$this->source})";
-        } else {
-            $fromStatement = $this->source;
-        }
+        $sqlParts['from'] = "FROM " . $this->source;
         if ($this->alias !== null) {
-            $fromStatement .= " AS " . $this->alias;
+            $sqlParts['from'] .= " AS " . $this->alias;
         }
-        $sqlParts['from'] = "FROM " . $fromStatement;
 
         // prepare joins
         if ($this->joins) {
@@ -276,11 +256,6 @@ class Query
         if ($this->orderBy) {
             $orderByStatement = implode(", ", $this->orderBy);
             $sqlParts['orderBy'] = "ORDER BY " . $orderByStatement;
-        }
-
-        // prepare limit by
-        if ($this->limitBy) {
-            $sqlParts['limitBy'] = $this->limitBy;
         }
 
         // prepare limit

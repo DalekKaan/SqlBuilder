@@ -32,7 +32,6 @@ class QueryFacadeTest extends TestCase
                 new ConditionStmt('Field1', '>', 20),
                 ['AND', 'Field2', '=', 15]
             ])
-            ->limitBy([5, ["UserID", "GroupID"], 10])
             ->limit(50, 450)
             ->groupBy(["Field3", "Field4"]);
 
@@ -41,7 +40,6 @@ class QueryFacadeTest extends TestCase
             'FROM ExampleTable ' .
             'WHERE ((Field1 > 20) AND (Field2 = 15)) ' .
             'GROUP BY Field3, Field4 ' .
-            'LIMIT 5 OFFSET 10 BY UserID, GroupID ' .
             'LIMIT 50 OFFSET 450';
         $this->assertSame($expectedSQL, $facade->buildSql());
     }
@@ -151,20 +149,6 @@ class QueryFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable WHERE ((Field1 > 20) AND (Field2 = 15) AND (Field3 IN (1, '4', 5, 'str', TRUE)))",
-            $facade->buildSql()
-        );
-    }
-
-    /**
-     * Test LIMIT BY
-     */
-    public function testLimitBy(): void
-    {
-        $facade = new QueryFacade(new Query("ExampleTable"));
-        $facade->limitBy([5, ["UserID", "GroupID"], 10]);
-
-        $this->assertSame(
-            "SELECT * FROM ExampleTable LIMIT 5 OFFSET 10 BY UserID, GroupID",
             $facade->buildSql()
         );
     }
