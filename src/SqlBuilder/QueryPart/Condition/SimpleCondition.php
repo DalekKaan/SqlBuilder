@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\QueryPart;
+namespace SqlBuilder\QueryPart\Condition;
 
 /**
  * Simple string condition
@@ -36,8 +36,6 @@ class SimpleCondition implements ICondition
     {
         return $this->condition;
     }
-    
-    
 
     /**
      * {@inheritDoc}

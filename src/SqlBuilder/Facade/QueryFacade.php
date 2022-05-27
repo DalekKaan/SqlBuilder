@@ -2,15 +2,15 @@
 
 namespace SqlBuilder\Facade;
 
+use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\Query;
 use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
-use SqlBuilder\QueryPart\Column;
-use SqlBuilder\QueryPart\CrossJoinStmt;
-use SqlBuilder\QueryPart\IColumn;
-use SqlBuilder\QueryPart\JoinStmt;
-use SqlBuilder\QueryPart\OrderStmt;
-use SqlBuilder\QueryPart\WithStmt;
-use SqlBuilder\SqlHelper;
+use SqlBuilder\QueryPart\Column\Column;
+use SqlBuilder\QueryPart\Column\IColumn;
+use SqlBuilder\QueryPart\Join\CrossJoinStmt;
+use SqlBuilder\QueryPart\Join\JoinStmt;
+use SqlBuilder\QueryPart\Order\OrderStmt;
+use SqlBuilder\QueryPart\With\WithStmt;
 
 /**
  * Facade for query.

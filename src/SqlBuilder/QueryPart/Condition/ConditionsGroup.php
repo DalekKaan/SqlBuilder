@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\QueryPart;
+namespace SqlBuilder\QueryPart\Condition;
 
 /**
  * Group of conditions

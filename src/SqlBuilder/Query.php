@@ -3,12 +3,12 @@
 namespace SqlBuilder;
 
 use SqlBuilder\QueryPart\ClickHouse\LimitByStmt;
-use SqlBuilder\QueryPart\Column;
-use SqlBuilder\QueryPart\IColumn;
-use SqlBuilder\QueryPart\ICondition;
-use SqlBuilder\QueryPart\IJoin;
-use SqlBuilder\QueryPart\OrderStmt;
-use SqlBuilder\QueryPart\WithStmt;
+use SqlBuilder\QueryPart\Column\Column;
+use SqlBuilder\QueryPart\Column\IColumn;
+use SqlBuilder\QueryPart\Condition\ICondition;
+use SqlBuilder\QueryPart\Join\IJoin;
+use SqlBuilder\QueryPart\Order\OrderStmt;
+use SqlBuilder\QueryPart\With\WithStmt;
 
 /**
  * Query

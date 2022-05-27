@@ -1,11 +1,11 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Helpers;
 
-use SqlBuilder\QueryPart\ConditionsGroup;
-use SqlBuilder\QueryPart\ConditionStmt;
-use SqlBuilder\QueryPart\ICondition;
-use SqlBuilder\QueryPart\SimpleCondition;
+use SqlBuilder\QueryPart\Condition\ConditionsGroup;
+use SqlBuilder\QueryPart\Condition\ConditionStmt;
+use SqlBuilder\QueryPart\Condition\ICondition;
+use SqlBuilder\QueryPart\Condition\SimpleCondition;
 
 /**
  * SQL helper

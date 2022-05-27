@@ -5,8 +5,8 @@ namespace tests\SqlBuilder;
 use PHPUnit\Framework\TestCase;
 use SqlBuilder\Facade\QueryFacade;
 use SqlBuilder\Query;
-use SqlBuilder\QueryPart\Column;
-use SqlBuilder\QueryPart\ConditionStmt;
+use SqlBuilder\QueryPart\Column\Column;
+use SqlBuilder\QueryPart\Condition\ConditionStmt;
 
 class QueryFacadeTest extends TestCase
 {
