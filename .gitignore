@@ -1,4 +1,5 @@
-/querybuilder.iml
 /.idea
 /vendor/
 /composer.lock
+/*.iml
+/index.php
