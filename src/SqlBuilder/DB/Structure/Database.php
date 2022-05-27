@@ -16,7 +16,7 @@ class Database
     /**
      * @param Scheme[] $schemes schemes
      */
-    public function __construct(array $schemes)
+    public function __construct(array $schemes = [])
     {
         $this->setSchemes($schemes);
     }
