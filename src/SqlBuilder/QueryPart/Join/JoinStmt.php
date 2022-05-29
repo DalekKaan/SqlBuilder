@@ -2,7 +2,7 @@
 
 namespace SqlBuilder\QueryPart\Join;
 
-use SqlBuilder\Query;
+use SqlBuilder\Select;
 
 class JoinStmt implements IJoin
 {
@@ -15,7 +15,7 @@ class JoinStmt implements IJoin
 
     /**
      * Object to join
-     * @var string|Query
+     * @var string|Select
      */
     protected $source;
 

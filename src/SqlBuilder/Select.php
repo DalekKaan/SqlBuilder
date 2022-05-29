@@ -10,9 +10,9 @@ use SqlBuilder\QueryPart\Order\OrderStmt;
 use SqlBuilder\QueryPart\With\WithStmt;
 
 /**
- * Query
+ * `SELECT` statement
  */
-class Query
+class Select
 {
     /**
      * "WITH" statements
@@ -87,7 +87,7 @@ class Query
     protected ?int $offset = null;
 
     /**
-     * @param Query|string $from table or sub query
+     * @param Select|string $from table or sub query
      * @param string|null $alias source alias
      */
     public function __construct($from, ?string $alias = null)

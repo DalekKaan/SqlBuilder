@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\SqlBuilder;
+namespace SqlBuilder;
 
 use PHPUnit\Framework\TestCase;
 use SqlBuilder\Helpers\SqlHelper;

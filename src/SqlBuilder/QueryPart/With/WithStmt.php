@@ -2,8 +2,8 @@
 
 namespace SqlBuilder\QueryPart\With;
 
-use SqlBuilder\Facade\QueryFacade;
-use SqlBuilder\Query;
+use SqlBuilder\Facade\SelectFacade;
+use SqlBuilder\Select;
 
 /**
  * "With" SQL statement
@@ -12,7 +12,7 @@ class WithStmt
 {
     /**
      * Data
-     * @var string|integer|Query
+     * @var string|integer|Select
      */
     protected $data;
 
@@ -23,7 +23,7 @@ class WithStmt
     protected string $alias;
 
     /**
-     * @param Query|int|string $data
+     * @param Select|int|string $data
      * @param string $alias
      */
     public function __construct($data, string $alias)
@@ -34,7 +34,7 @@ class WithStmt
     
     public function __toString()
     {
-        if ($this->data instanceof Query || $this->data instanceof QueryFacade) {
+        if ($this->data instanceof Select || $this->data instanceof SelectFacade) {
             return sprintf("%s AS %s", $this->alias, $this->data);
         }
         return sprintf("%s AS %s", $this->data, $this->alias);

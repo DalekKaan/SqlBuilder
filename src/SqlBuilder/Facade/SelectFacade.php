@@ -3,7 +3,7 @@
 namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Query;
+use SqlBuilder\Select;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Column\IColumn;
 use SqlBuilder\QueryPart\Join\CrossJoinStmt;
@@ -59,28 +59,28 @@ use SqlBuilder\QueryPart\With\WithStmt;
  *  $sql = $queryFacade->buildSql();
  *  ```
  */
-class QueryFacade
+class SelectFacade
 {
     /**
      * Query
-     * @var Query
+     * @var Select
      */
-    protected Query $query;
+    protected Select $query;
 
     /**
      * Create facade with new query
-     * @param Query|string $from table or sub query
+     * @param Select|string $from table or sub query
      * @param string|null $alias source alias
      * @return static
      */
     public static function newQuery($from, string $alias = null): self {
-        return new self(new Query($from, $alias));
+        return new self(new Select($from, $alias));
     }
 
     /**
-     * @param Query $query query
+     * @param Select $query query
      */
-    public function __construct(Query $query)
+    public function __construct(Select $query)
     {
         $this->query = $query;
     }
@@ -569,9 +569,9 @@ class QueryFacade
 
     /**
      * Returns query from this facade
-     * @return Query
+     * @return Select
      */
-    public function getQuery(): Query
+    public function getQuery(): Select
     {
         return $this->query;
     }
