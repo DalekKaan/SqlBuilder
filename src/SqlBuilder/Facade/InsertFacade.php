@@ -38,6 +38,15 @@ class InsertFacade
     }
 
     /**
+     * Returns query from this facade
+     * @return Insert
+     */
+    public function getStatement(): Insert
+    {
+        return $this->stmt;
+    }
+
+    /**
      * @param Insert $stmt the `INSERT` statement
      */
     public function __construct(Insert $stmt)

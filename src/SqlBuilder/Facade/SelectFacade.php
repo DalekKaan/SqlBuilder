@@ -65,7 +65,7 @@ class SelectFacade
      * Query
      * @var Select
      */
-    protected Select $query;
+    protected Select $stmt;
 
     /**
      * Create facade with new query
@@ -78,11 +78,20 @@ class SelectFacade
     }
 
     /**
+     * Returns query from this facade
+     * @return Select
+     */
+    public function getStatement(): Select
+    {
+        return $this->stmt;
+    }
+
+    /**
      * @param Select $query query
      */
     public function __construct(Select $query)
     {
-        $this->query = $query;
+        $this->stmt = $query;
     }
 
     /**
@@ -113,9 +122,9 @@ class SelectFacade
     {
         foreach ($with as $alias => $data) {
             if ($data instanceof WithStmt) {
-                $this->query->addWith($data);
+                $this->stmt->addWith($data);
             } else {
-                $this->query->addWith(new WithStmt($data, $alias));
+                $this->stmt->addWith(new WithStmt($data, $alias));
             }
         }
         return $this;
@@ -162,13 +171,13 @@ class SelectFacade
     {
         foreach ($columns as $alias => $column) {
             if ($column instanceof IColumn) {
-                $this->query->addColumn($column);
+                $this->stmt->addColumn($column);
             } else if (is_array($column)) {
-                $this->query->addColumn(new Column($column[0], $column[1]));
+                $this->stmt->addColumn(new Column($column[0], $column[1]));
             } else if (!is_string($alias)) {
-                $this->query->addColumn(new Column($column));
+                $this->stmt->addColumn(new Column($column));
             } else {
-                $this->query->addColumn(new Column($column, $alias));
+                $this->stmt->addColumn(new Column($column, $alias));
             }
         }
         return $this;
@@ -337,7 +346,7 @@ class SelectFacade
      */
     public function crossJoin(string $table, ?string $as = null): self
     {
-        $this->query->addJoin(new CrossJoinStmt($table, $as));
+        $this->stmt->addJoin(new CrossJoinStmt($table, $as));
         return $this;
     }
 
@@ -380,7 +389,7 @@ class SelectFacade
      */
     public function join(string $type, string $table, ?string $as = null, $on = null): self
     {
-        $this->query->addJoin(new JoinStmt($type, $table, $as, $on));
+        $this->stmt->addJoin(new JoinStmt($type, $table, $as, $on));
         return $this;
     }
 
@@ -405,7 +414,7 @@ class SelectFacade
     public function groupBy(array $fields): self
     {
         foreach ($fields as $field) {
-            $this->query->addGroupBy($field);
+            $this->stmt->addGroupBy($field);
         }
         return $this;
     }
@@ -447,7 +456,7 @@ class SelectFacade
      */
     public function having($data): self
     {
-        $this->query->setHawing(SqlHelper::makeCondition($data));
+        $this->stmt->setHawing(SqlHelper::makeCondition($data));
         return $this;
     }
 
@@ -487,7 +496,7 @@ class SelectFacade
      */
     public function where($conditions): self
     {
-        $this->query->setWhere(SqlHelper::makeCondition($conditions));
+        $this->stmt->setWhere(SqlHelper::makeCondition($conditions));
         return $this;
     }
 
@@ -526,10 +535,10 @@ class SelectFacade
      */
     public function limit(int $limit, ?int $offset = null): self
     {
-        $this->query->setLimit($limit);
+        $this->stmt->setLimit($limit);
 
         if ($offset !== null) {
-            $this->query->setOffset($offset);
+            $this->stmt->setOffset($offset);
         }
         return $this;
     }
@@ -557,23 +566,14 @@ class SelectFacade
     {
         foreach ($fields as $field) {
             if ($field instanceof OrderStmt) {
-                $this->query->addOrderBy($field);
+                $this->stmt->addOrderBy($field);
             } elseif (is_array($field)) {
-                $this->query->addOrderBy(new OrderStmt($field[0], $field[1] ?? OrderStmt::DIRECTION_ASC));
+                $this->stmt->addOrderBy(new OrderStmt($field[0], $field[1] ?? OrderStmt::DIRECTION_ASC));
             } else {
-                $this->query->addOrderBy(new OrderStmt($field));
+                $this->stmt->addOrderBy(new OrderStmt($field));
             }
         }
         return $this;
-    }
-
-    /**
-     * Returns query from this facade
-     * @return Select
-     */
-    public function getQuery(): Select
-    {
-        return $this->query;
     }
 
     /**
@@ -582,11 +582,11 @@ class SelectFacade
      */
     public function buildSql(): string
     {
-        return $this->query->buildSql();
+        return $this->stmt->buildSql();
     }
 
     public function __toString()
     {
-        return $this->query->__toString();
+        return $this->stmt->__toString();
     }
 }
