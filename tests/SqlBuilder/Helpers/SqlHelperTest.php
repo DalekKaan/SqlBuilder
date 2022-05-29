@@ -1,9 +1,8 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\QueryPart\Condition\ConditionStmt;
 
 class SqlHelperTest extends TestCase

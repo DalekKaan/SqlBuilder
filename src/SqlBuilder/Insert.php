@@ -107,7 +107,7 @@ class Insert
      * To SQL
      * @return string
      */
-    public function toSql(): string
+    public function buildSql(): string
     {
         $sql = "INSERT INTO {$this->target}";
         if ($this->columns !== null) {
@@ -126,7 +126,7 @@ class Insert
 
     public function __toString(): string
     {
-        return "({$this->toSql()})";
+        return "({$this->buildSql()})";
     }
 
 }

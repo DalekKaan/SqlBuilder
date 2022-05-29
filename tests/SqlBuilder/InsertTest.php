@@ -9,21 +9,21 @@ class InsertTest extends TestCase
     public function testBuildSql(): void
     {
         $insertStmt = new Insert("Users");
-        $this->assertEquals("INSERT INTO Users VALUES ()", $insertStmt->toSql());
+        $this->assertEquals("INSERT INTO Users VALUES ()", $insertStmt->buildSql());
 
         $insertStmt = new Insert("Users");
         $insertStmt->setColumns(['name', 'surname', 'age']);
-        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ()", $insertStmt->toSql());
+        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ()", $insertStmt->buildSql());
 
         $insertStmt = new Insert("Users");
         $insertStmt->setColumns(['name', 'surname', 'age'])
             ->setValues(['John', 'Smith', 25]);
-        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ('John', 'Smith', 25)", $insertStmt->toSql());
+        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ('John', 'Smith', 25)", $insertStmt->buildSql());
 
         $insertStmt = new Insert("Users");
         $insertStmt->setColumns(['name', 'surname', 'age'])
             ->setValues([['John', 'Smith', 25], ['Alan', 'Clark']]);
-        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ('John', 'Smith', 25), ('Alan', 'Clark')", $insertStmt->toSql());
+        $this->assertEquals("INSERT INTO Users (name, surname, age) VALUES ('John', 'Smith', 25), ('Alan', 'Clark')", $insertStmt->buildSql());
 
         $selectStmt = new Select("Clients");
         $selectStmt->addColumn("name");
@@ -32,6 +32,6 @@ class InsertTest extends TestCase
         $insertStmt = new Insert("Users");    
         $insertStmt->setColumns(['name', 'surname', 'age'])
             ->setSelect($selectStmt);
-        $this->assertEquals("INSERT INTO Users (name, surname, age) (SELECT name, surname, age FROM Clients)", $insertStmt->toSql());
+        $this->assertEquals("INSERT INTO Users (name, surname, age) (SELECT name, surname, age FROM Clients)", $insertStmt->buildSql());
     }
 }

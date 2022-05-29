@@ -1,14 +1,13 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Facade\SelectFacade;
-use SqlBuilder\Select;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Condition\ConditionStmt;
+use SqlBuilder\Select;
 
-class QueryFacadeTest extends TestCase
+class SelectFacadeTest extends TestCase
 {
 
     /**
