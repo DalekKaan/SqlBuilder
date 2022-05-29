@@ -60,13 +60,13 @@ class SelectFacadeTest extends TestCase
             $facade->buildSql()
         );
         
-        $facade = SelectFacade::newQuery("ExampleTable");
+        $facade = SelectFacade::selectFrom("ExampleTable");
         $this->assertSame(
             "SELECT * FROM ExampleTable",
             $facade->buildSql()
         );
 
-        $facade = SelectFacade::newQuery("ExampleTable", "ET");
+        $facade = SelectFacade::selectFrom("ExampleTable", "ET");
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
             $facade->buildSql()

@@ -73,7 +73,7 @@ class SelectFacade
      * @param string|null $alias source alias
      * @return static
      */
-    public static function newQuery($from, string $alias = null): self {
+    public static function selectFrom($from, string $alias = null): self {
         return new self(new Select($from, $alias));
     }
 
