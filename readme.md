@@ -8,7 +8,7 @@ Useful to build some simple SQL queries with php interfaces.
 General example.
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users", "U"));
+$queryFacade = new SelectFacade(new Query("Users", "U"));
 
 // using `WITH`
 $queryFacade->with([
@@ -74,7 +74,7 @@ HAVING ((count(*) > 10))
 Create a simple query to table `Users`:
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade = new SelectFacade(new Query("Users"));
 $sql = $queryFacade->buildSql();
 ```
 It will result in:
@@ -85,7 +85,7 @@ SELECT * FROM Users
 Create a query to table `Users` with alias `U`:
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users", "U"));
+$queryFacade = new SelectFacade(new Query("Users", "U"));
 $sql = $queryFacade->buildSql();
 ```
 It will result in:
@@ -96,8 +96,8 @@ SELECT * FROM Users AS U
 Create a query to some subquery `Users` with alias `U`:
 
 ```php
-$subqueryFacade = new QueryFacade(new Query("Users", "U"));
-$queryFacade = new QueryFacade(new Query($subqueryFacade, "SQ"));
+$subqueryFacade = new SelectFacade(new Query("Users", "U"));
+$queryFacade = new SelectFacade(new Query($subqueryFacade, "SQ"));
 $sql = $queryFacade->buildSql();
 ```
 It will result in:
@@ -108,7 +108,7 @@ SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ### Specifying columns
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade = new SelectFacade(new Query("Users"));
 $queryFacade->select([
     'Name',
     25,
@@ -127,10 +127,10 @@ SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult F
 ### Joining tables
 
 ```php
-$ordersSubqueryFacade = new QueryFacade(new Query("Orders"));
+$ordersSubqueryFacade = new SelectFacade(new Query("Orders"));
 $ordersSubqueryFacade->where("date BETWEEN '2021-01-01' AND '2021-01-31'");
 
-$queryFacade = new QueryFacade(new Query("Users", "U"));
+$queryFacade = new SelectFacade(new Query("Users", "U"));
 $queryFacade->select([
     "U.Login",
     ["D.Name", "Department"],
@@ -160,7 +160,7 @@ FROM Users AS U
 ### Adding conditions
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade = new SelectFacade(new Query("Users"));
 $queryFacade->where([
     new ConditionStmt('Age', '>', 20),
     ['AND', 'DepartmentID', '=', 200],
@@ -177,7 +177,7 @@ SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN 
 ### Using aggregation
 
 ```php
-$queryFacade = new QueryFacade(new Query("Users"));
+$queryFacade = new SelectFacade(new Query("Users"));
 $queryFacade->select([
     ['count(*)', 'Cnt'],
     'DepartmentID',
