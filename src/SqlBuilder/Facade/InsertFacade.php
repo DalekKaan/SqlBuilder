@@ -16,7 +16,7 @@ class InsertFacade
     /**
      * @param string $target target
      * @param array|null $columnsNames columns of the target
-     * @param array|Select|string $data data to insert
+     * @param array|Select|SelectFacade|string $data data to insert
      * @return static
      */
     public static function into(string $target, array $columnsNames = null, $data = null): self {
@@ -28,6 +28,8 @@ class InsertFacade
                 $stmt->setValues($data);
             } elseif ($data instanceof Select) {
                 $stmt->setSelect($data);
+            }elseif ($data instanceof SelectFacade) {
+                $stmt->setSelect($data->getStatement());
             } elseif (is_string($data)) {
                 $stmt->setSelect($data);
             } else {
