@@ -5,16 +5,18 @@ Useful to build some simple SQL queries with php interfaces.
 
 ## Usage
 
+### Select
+
 General example.
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users", "U"));
+$selectFacade = new SelectFacade::selectFrom("Users", "U");
 
 // using `WITH`
-$queryFacade->with([
+$selectFacade->with([
     'var1' => '152',
     'var2' => 'SomeValue',
-    'subQuery' => new Query("AnotherTable"),
+    'subQuery' => new Select("AnotherTable"),
 ])
 
 // select columns
@@ -47,7 +49,7 @@ $queryFacade->with([
 // limit, offset
     ->limit(5, 2);
 
-$sql = $queryFacade->buildSql();
+$sql = $selectFacade->buildSql();
 
 echo $sql;
 ```
@@ -74,8 +76,8 @@ HAVING ((count(*) > 10))
 Create a simple query to table `Users`:
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users"));
-$sql = $queryFacade->buildSql();
+$selectFacade = new SelectFacade::selectFrom("Users");
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -85,8 +87,8 @@ SELECT * FROM Users
 Create a query to table `Users` with alias `U`:
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users", "U"));
-$sql = $queryFacade->buildSql();
+$selectFacade = new SelectFacade::selectFrom("Users", "U");
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -96,9 +98,9 @@ SELECT * FROM Users AS U
 Create a query to some subquery `Users` with alias `U`:
 
 ```php
-$subqueryFacade = new SelectFacade(new Query("Users", "U"));
-$queryFacade = new SelectFacade(new Query($subqueryFacade, "SQ"));
-$sql = $queryFacade->buildSql();
+$subqueryFacade = new SelectFacade::selectFrom("Users", "U");
+$selectFacade = new SelectFacade(new Select($subqueryFacade, "SQ"));
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -108,8 +110,8 @@ SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ### Specifying columns
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users"));
-$queryFacade->select([
+$selectFacade = new SelectFacade::selectFrom("Users");
+$selectFacade->select([
     'Name',
     25,
     ['PID', 'ParentID'],
@@ -117,7 +119,7 @@ $queryFacade->select([
     new Column('Age > 18', 'IsAdult')
 ]);
 
-$sql = $queryFacade->buildSql();
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -127,21 +129,21 @@ SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult F
 ### Joining tables
 
 ```php
-$ordersSubqueryFacade = new SelectFacade(new Query("Orders"));
+$ordersSubqueryFacade = new SelectFacade::selectFrom("Orders");
 $ordersSubqueryFacade->where("date BETWEEN '2021-01-01' AND '2021-01-31'");
 
-$queryFacade = new SelectFacade(new Query("Users", "U"));
-$queryFacade->select([
+$selectFacade = new SelectFacade::selectFrom("Users", "U");
+$selectFacade->select([
     "U.Login",
     ["D.Name", "Department"],
     ["R.Name", "Role"],
     ["O.ID", "OrderID"]
 ])
     ->leftJoin("Departments", "D", new ConditionStmt('U.DepartmentID', '=', 'D.ID'))
-    ->rightJoin(new Query("Roles"), "R", 'U.RoleID = R.ID')
+    ->rightJoin(new Select("Roles"), "R", 'U.RoleID = R.ID')
     ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
 
-$sql = $queryFacade->buildSql();
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -160,14 +162,14 @@ FROM Users AS U
 ### Adding conditions
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users"));
-$queryFacade->where([
+$selectFacade = new SelectFacade::selectFrom("Users");
+$selectFacade->where([
     new ConditionStmt('Age', '>', 20),
     ['AND', 'DepartmentID', '=', 200],
     new ConditionStmt('SomeProp', 'IN', [1, '4', 5, 'str', true])
 ]);
 
-$sql = $queryFacade->buildSql();
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
@@ -177,8 +179,8 @@ SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN 
 ### Using aggregation
 
 ```php
-$queryFacade = new SelectFacade(new Query("Users"));
-$queryFacade->select([
+$selectFacade = new SelectFacade::selectFrom("Users");
+$selectFacade->select([
     ['count(*)', 'Cnt'],
     'DepartmentID',
     'PositionID',
@@ -189,7 +191,7 @@ $queryFacade->select([
         ['OR', 'count(*)', '<', 10]
     ]);
 
-$sql = $queryFacade->buildSql();
+$sql = $selectFacade->buildSql();
 ```
 It will result in:
 ```sql
