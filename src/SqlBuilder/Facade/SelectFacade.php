@@ -184,6 +184,13 @@ class SelectFacade
     }
 
     /**
+     * Alias for `select` method
+     */
+    public function columns(array $columns): self {
+        return $this->select($columns);
+    }
+
+    /**
      * Join table or subquery using LEFT JOIN.
      * Special case of `join` method.
      *
