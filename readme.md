@@ -7,7 +7,7 @@ Useful to build some simple SQL queries with php interfaces.
 
 ### Select
 
-General example.
+#### General example.
 
 ```php
 $selectFacade = new SelectFacade::selectFrom("Users", "U");
@@ -71,7 +71,7 @@ HAVING ((count(*) > 10))
     LIMIT 5 OFFSET 2
 ```
 
-### Creating queries
+#### Creating queries
 
 Create a simple query to table `Users`:
 
@@ -107,7 +107,7 @@ It will result in:
 SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
 ```
 
-### Specifying columns
+#### Specifying columns
 
 ```php
 $selectFacade = new SelectFacade::selectFrom("Users");
@@ -126,7 +126,7 @@ It will result in:
 SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
 ```
 
-### Joining tables
+#### Joining tables
 
 ```php
 $ordersSubqueryFacade = new SelectFacade::selectFrom("Orders");
@@ -159,7 +159,7 @@ FROM Users AS U
                              ) AS O ON (U.ID = O.UserID)
 ```
 
-### Adding conditions
+#### Adding conditions
 
 ```php
 $selectFacade = new SelectFacade::selectFrom("Users");
@@ -176,7 +176,7 @@ It will result in:
 SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN (1, '4', 5, 'str', TRUE)))
 ```
 
-### Using aggregation
+#### Using aggregation
 
 ```php
 $selectFacade = new SelectFacade::selectFrom("Users");
@@ -196,4 +196,102 @@ $sql = $selectFacade->buildSql();
 It will result in:
 ```sql
 SELECT count(*) AS Cnt, DepartmentID, PositionID FROM Users GROUP BY DepartmentID, PositionID HAVING ((count(*) > 15) OR (count(*) < 10))
+```
+
+### Insert
+
+#### General example
+
+```php
+$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age'], [
+    ['Menaal', 'Greenaway', 25],
+    ['Kajus', 'Jensen', 18],
+    ['Lula', 'Perry', 33],
+    ['Chardonnay', 'Ireland', 41],
+    ['Finbar', 'Walls', 29]
+]);
+$sql = $insertFacade->buildSql();
+```
+It will result in:
+```sql
+INSERT INTO Users (Name, Surname, Age)
+VALUES ('Menaal', 'Greenaway', 25),
+       ('Kajus', 'Jensen', 18),
+       ('Lula', 'Perry', 33),
+       ('Chardonnay', 'Ireland', 41),
+       ('Finbar', 'Walls', 29)
+```
+
+You can also use `SELECT` subquery.
+```php
+$fromSelect = SelectFacade::selectFrom("Clients")
+    ->select(['Name', 'Surname', 'Age'])
+    ->where(['Age', '>=', 18]);
+$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age'], $fromSelect);
+$sql = $insertFacade->buildSql();
+```
+It will result in:
+```sql
+INSERT INTO Users (Name, Surname, Age) (SELECT Name, Surname, Age FROM Clients WHERE (Age >= 18))
+```
+
+#### Insert arrays
+
+```php
+$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
+$insertFacade->values([
+    ['Menaal', 'Greenaway', 25],
+    ['Kajus', 'Jensen', 18],
+    ['Lula', 'Perry', 33],
+    ['Chardonnay', 'Ireland', 41],
+    ['Finbar', 'Walls', 29]
+]);
+$sql = $insertFacade->buildSql();
+```
+It will result in:
+```sql
+INSERT INTO Users (Name, Surname, Age)
+VALUES ('Menaal', 'Greenaway', 25),
+       ('Kajus', 'Jensen', 18),
+       ('Lula', 'Perry', 33),
+       ('Chardonnay', 'Ireland', 41),
+       ('Finbar', 'Walls', 29)
+```
+You can also add rows in loop.
+```php
+$rows = [
+    ['Menaal', 'Greenaway', 25],
+    ['Kajus', 'Jensen', 18],
+    ['Lula', 'Perry', 33],
+    ['Chardonnay', 'Ireland', 41],
+    ['Finbar', 'Walls', 29]
+];
+$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
+foreach ($rows as $row) {
+    $insertFacade->getStatement()->addValues($row);
+}
+$sql = $insertFacade->buildSql();
+```
+It will result in:
+```sql
+INSERT INTO Users (Name, Surname, Age)
+VALUES ('Menaal', 'Greenaway', 25),
+       ('Kajus', 'Jensen', 18),
+       ('Lula', 'Perry', 33),
+       ('Chardonnay', 'Ireland', 41),
+       ('Finbar', 'Walls', 29)
+```
+
+#### Using `SELECT`
+
+```php
+$fromSelect = SelectFacade::selectFrom("Clients")
+    ->select(['Name', 'Surname', 'Age'])
+    ->where(['Age', '>=', 18]);
+$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
+$insertFacade->select($fromSelect);
+```
+It will result in:
+```sql
+INSERT INTO Users (Name, Surname, Age) (SELECT Name, Surname, Age FROM Clients WHERE (Age >= 18))
 ```
