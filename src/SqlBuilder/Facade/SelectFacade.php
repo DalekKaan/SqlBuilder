@@ -77,7 +77,19 @@ class SelectFacade
     public static function selectFrom($from, string $alias = null): self
     {
         if (is_array($from)) {
-            return new self(new Select(new UnionAll($from)));
+            $unionData = array_map(static function ($source) {
+                if (is_array($source)) {
+                    return new Select($source[0], $source[1] ?? null);
+                }
+                if ($source instanceof self) {
+                    return $source->getStatement();
+                }
+                if ($source instanceof Select) {
+                    return $source;
+                }
+                return new Select($source);
+            }, $from);
+            return new self(new Select(new UnionAll($unionData)));
         }
         return new self(new Select($from, $alias));
     }

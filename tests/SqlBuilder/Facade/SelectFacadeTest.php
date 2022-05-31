@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
 
 namespace SqlBuilder\Facade;
 
@@ -44,22 +44,57 @@ class SelectFacadeTest extends TestCase
     }
 
     /**
+     * Test `selectFrom` static method
+     * @return void
+     */
+    public static function testSelectFrom(): void
+    {
+        $facade = SelectFacade::selectFrom("Users");
+        self::assertEquals("SELECT * FROM Users", $facade->buildSql());
+
+        $facade = SelectFacade::selectFrom("Users", "U");
+        self::assertEquals("SELECT * FROM Users AS U", $facade->buildSql());
+
+        $facade = SelectFacade::selectFrom(["Users", "Clients"]);
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users) UNION ALL (SELECT * FROM Clients)", $facade->buildSql());
+
+        $facade = SelectFacade::selectFrom([
+            ["Users", "U"],
+            ["Clients", "C"]
+        ]);
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+
+        $facade = SelectFacade::selectFrom([
+            SelectFacade::selectFrom('Users', 'U'),
+            SelectFacade::selectFrom('Clients', 'C'),
+        ]);
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+
+        $facade = SelectFacade::selectFrom([
+            new Select('Users', 'U'),
+            new Select('Clients', 'C'),
+        ]);
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+    }
+
+    /**
      * Test create facade with empty query
      * @return void
      */
-    public function testCreateSampleQuery(): void {
+    public function testCreateSampleQuery(): void
+    {
         $facade = new SelectFacade(new Select("ExampleTable"));
         $this->assertSame(
             "SELECT * FROM ExampleTable",
             $facade->buildSql()
         );
-        
+
         $facade = new SelectFacade(new Select("ExampleTable", "ET"));
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
             $facade->buildSql()
         );
-        
+
         $facade = SelectFacade::selectFrom("ExampleTable");
         $this->assertSame(
             "SELECT * FROM ExampleTable",
