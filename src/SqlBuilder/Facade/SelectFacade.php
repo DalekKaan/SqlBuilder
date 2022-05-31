@@ -3,13 +3,14 @@
 namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Select;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Column\IColumn;
 use SqlBuilder\QueryPart\Join\CrossJoinStmt;
 use SqlBuilder\QueryPart\Join\JoinStmt;
 use SqlBuilder\QueryPart\Order\OrderStmt;
+use SqlBuilder\QueryPart\Union\UnionAll;
 use SqlBuilder\QueryPart\With\WithStmt;
+use SqlBuilder\Select;
 
 /**
  * Facade for query.
@@ -18,7 +19,7 @@ use SqlBuilder\QueryPart\With\WithStmt;
  *
  * ```php
  *  $queryFacade = new QueryFacade(new Query("Users", "U"));
- * 
+ *
  *  // using `WITH`
  *  $queryFacade->with([
  *      'var1' => '152',
@@ -69,11 +70,15 @@ class SelectFacade
 
     /**
      * Create facade with new query
-     * @param Select|string $from table or sub query
+     * @param Select|array|string $from table or sub query
      * @param string|null $alias source alias
      * @return static
      */
-    public static function selectFrom($from, string $alias = null): self {
+    public static function selectFrom($from, string $alias = null): self
+    {
+        if (is_array($from)) {
+            return new self(new Select(new UnionAll($from)));
+        }
         return new self(new Select($from, $alias));
     }
 
@@ -186,7 +191,8 @@ class SelectFacade
     /**
      * Alias for `select` method
      */
-    public function columns(array $columns): self {
+    public function columns(array $columns): self
+    {
         return $this->select($columns);
     }
 
