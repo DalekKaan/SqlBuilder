@@ -2,6 +2,8 @@
 
 namespace SqlBuilder\Model\QueryPart\Union;
 
+use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\Model\Query\QueryInterface;
 use SqlBuilder\SQLStatementInterface;
 
 /**
@@ -11,12 +13,12 @@ class Union implements SQLStatementInterface
 {
     /**
      * `SELECT` statements
-     * @var string[]
+     * @var QueryInterface[]
      */
     protected $statements;
 
     /**
-     * @param string[] $statements `SELECT` statements
+     * @param QueryInterface[] $statements `SELECT` statements
      */
     public function __construct(array $statements)
     {
@@ -28,6 +30,6 @@ class Union implements SQLStatementInterface
      */
     public function toSQL(): string
     {
-        return implode(" UNION ", $this->statements);
+        return SqlHelper::implodeStatements(") UNION (", $this->statements);
     }
 }

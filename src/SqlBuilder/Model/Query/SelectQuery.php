@@ -263,10 +263,5 @@ class SelectQuery implements QueryInterface
         return implode(" ", $sqlParts);
     }
 
-    public function __toString()
-    {
-        return "({$this->toSQL()})";
-    }
-
 
 }

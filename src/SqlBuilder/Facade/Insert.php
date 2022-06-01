@@ -5,13 +5,8 @@ namespace SqlBuilder\Facade;
 use SqlBuilder\Model\Query\InsertQuery;
 use SqlBuilder\Model\Query\SelectQuery;
 
-class Insert
+class Insert extends AbstractQueryFacade
 {
-    /**
-     * The `INSERT` statement
-     * @var InsertQuery 
-     */
-    protected InsertQuery $stmt;
 
     /**
      * @param string $target target
@@ -85,13 +80,13 @@ class Insert
      * Build SQL
      * @return string
      */
-    public function buildSQL(): string {
+    public function toSql(): string {
         return $this->stmt->toSQL();
     }
-    
-    public function __toString():string
+
+    public function __toString(): string
     {
-        return $this->stmt->__toString();
+        return $this->toSql();
     }
 
 }

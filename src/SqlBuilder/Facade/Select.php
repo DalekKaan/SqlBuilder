@@ -9,7 +9,7 @@ use SqlBuilder\Model\QueryPart\Column\Column;
 use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use SqlBuilder\Model\QueryPart\Join\CrossJoinInterfaceStmt;
-use SqlBuilder\Model\QueryPart\Join\JoinStmtInterface;
+use SqlBuilder\Model\QueryPart\Join\JoinStatement;
 use SqlBuilder\Model\QueryPart\Order\OrderStmt;
 use SqlBuilder\Model\QueryPart\Union\UnionAll;
 use SqlBuilder\Model\QueryPart\With\WithStmt;
@@ -62,14 +62,8 @@ use SqlBuilder\Model\QueryPart\With\WithStmt;
  *  $sql = $queryFacade->buildSql();
  *  ```
  */
-class Select
+class Select extends AbstractQueryFacade
 {
-    /**
-     * Query
-     * @var QueryInterface
-     */
-    protected QueryInterface $stmt;
-
     /**
      * Create facade with new query
      * @param QueryInterface|array|string $from table or sub query
@@ -242,12 +236,12 @@ class Select
      * ... LEFT JOIN Users ON (Users.ID = UserID)
      * ```
      *
-     * @param string $table table or subquery
+     * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
      * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
      * @return self
      */
-    public function leftJoin(string $table, ?string $as = null, $on = null): self
+    public function leftJoin($table, ?string $as = null, $on = null): self
     {
         return $this->join("LEFT", $table, $as, SqlHelper::makeCondition($on));
     }
@@ -284,12 +278,12 @@ class Select
      * ... RIGHT JOIN Users ON (Users.ID = UserID)
      * ```
      *
-     * @param string $table table or subquery
+     * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
      * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
      * @return self
      */
-    public function rightJoin(string $table, ?string $as = null, $on = null): self
+    public function rightJoin($table, ?string $as = null, $on = null): self
     {
         return $this->join("RIGHT", $table, $as, SqlHelper::makeCondition($on));
     }
@@ -326,12 +320,12 @@ class Select
      * ... INNER JOIN Users ON (Users.ID = UserID)
      * ```
      *
-     * @param string $table table or subquery
+     * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
      * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
      * @return self
      */
-    public function innerJoin(string $table, ?string $as = null, $on = null): self
+    public function innerJoin($table, ?string $as = null, $on = null): self
     {
         return $this->join("INNER", $table, $as, SqlHelper::makeCondition($on));
     }
@@ -367,11 +361,11 @@ class Select
      * ... CROSS JOIN Users
      * ```
      *
-     * @param string $table table or subquery
+     * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
      * @return self
      */
-    public function crossJoin(string $table, ?string $as = null): self
+    public function crossJoin($table, ?string $as = null): self
     {
         $this->stmt->addJoin(new CrossJoinInterfaceStmt($table, $as));
         return $this;
@@ -409,14 +403,17 @@ class Select
      * ```
      *
      * @param string $type type of join ('LEFT', 'RIGHT', 'INNER', ...)
-     * @param string $table table or subquery
+     * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
      * @param ConditionInterface|null $on join condition. In case of `USING` statement must contain array of filed names,
      * @return self
      */
-    public function join(string $type, string $table, ?string $as = null, ?ConditionInterface $on = null): self
+    public function join(string $type, $table, ?string $as = null, ?ConditionInterface $on = null): self
     {
-        $this->stmt->addJoin(new JoinStmtInterface($type, $table, $as, $on));
+        if ($table instanceof QueryInterface) {
+            $table = "({$table->toSQL()})";
+        }
+        $this->stmt->addJoin(new JoinStatement($type, $table, $as, $on));
         return $this;
     }
 
@@ -601,19 +598,5 @@ class Select
             }
         }
         return $this;
-    }
-
-    /**
-     * Build sql using Query::buildSql() method
-     * @return string
-     */
-    public function buildSql(): string
-    {
-        return $this->stmt->toSQL();
-    }
-
-    public function __toString()
-    {
-        return $this->stmt->__toString();
     }
 }

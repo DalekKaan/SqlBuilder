@@ -40,7 +40,7 @@ class SelectFacadeTest extends TestCase
             'WHERE ((Field1 > 20) AND (Field2 = 15)) ' .
             'GROUP BY Field3, Field4 ' .
             'LIMIT 50 OFFSET 450';
-        $this->assertSame($expectedSQL, $facade->buildSql());
+        $this->assertSame($expectedSQL, $facade->toSql());
     }
 
     /**
@@ -50,31 +50,31 @@ class SelectFacadeTest extends TestCase
     public static function testSelectFrom(): void
     {
         $facade = Select::selectFrom("Users");
-        self::assertEquals("SELECT * FROM Users", $facade->buildSql());
+        self::assertEquals("SELECT * FROM Users", $facade->toSql());
 
         $facade = Select::selectFrom("Users", "U");
-        self::assertEquals("SELECT * FROM Users AS U", $facade->buildSql());
+        self::assertEquals("SELECT * FROM Users AS U", $facade->toSql());
 
         $facade = Select::selectFrom(["Users", "Clients"]);
-        self::assertEquals("SELECT * FROM (SELECT * FROM Users) UNION ALL (SELECT * FROM Clients)", $facade->buildSql());
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users) UNION ALL (SELECT * FROM Clients)", $facade->toSql());
 
         $facade = Select::selectFrom([
             ["Users", "U"],
             ["Clients", "C"]
         ]);
-        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->toSql());
 
         $facade = Select::selectFrom([
             Select::selectFrom('Users', 'U'),
             Select::selectFrom('Clients', 'C'),
         ]);
-        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->toSql());
 
         $facade = Select::selectFrom([
             new SelectQuery('Users', 'U'),
             new SelectQuery('Clients', 'C'),
         ]);
-        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
+        self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->toSql());
     }
 
     /**
@@ -86,25 +86,25 @@ class SelectFacadeTest extends TestCase
         $facade = new Select(new SelectQuery("ExampleTable"));
         $this->assertSame(
             "SELECT * FROM ExampleTable",
-            $facade->buildSql()
+            $facade->toSql()
         );
 
         $facade = new Select(new SelectQuery("ExampleTable", "ET"));
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
-            $facade->buildSql()
+            $facade->toSql()
         );
 
         $facade = Select::selectFrom("ExampleTable");
         $this->assertSame(
             "SELECT * FROM ExampleTable",
-            $facade->buildSql()
+            $facade->toSql()
         );
 
         $facade = Select::selectFrom("ExampleTable", "ET");
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -122,7 +122,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "WITH 152 AS var1, SomeValue AS var2, subQuery AS (SELECT * FROM AnotherTable) SELECT * FROM ExampleTable",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -140,7 +140,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT Field1, Field2 AS F2, Field3 AS F3 FROM ExampleTable",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -165,7 +165,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT U.Login, D.Name AS Department, R.Name AS Role, O.ID AS OrderID FROM Users AS U LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) INNER JOIN (SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31') AS O ON (U.ID = O.UserID)",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -183,7 +183,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable WHERE ((Field1 > 20) AND (Field2 = 15) AND (Field3 IN (1, '4', 5, 'str', TRUE)))",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -197,7 +197,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable LIMIT 50 OFFSET 450",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -211,7 +211,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable GROUP BY UserID, GroupID",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 
@@ -229,7 +229,7 @@ class SelectFacadeTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable GROUP BY UserID, GroupID HAVING ((count(*) > 15) OR (count(*) < 10))",
-            $facade->buildSql()
+            $facade->toSql()
         );
     }
 }

@@ -3,10 +3,11 @@
 namespace SqlBuilder\Model\QueryPart\Join;
 
 use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\Model\Query\QueryInterface;
 use SqlBuilder\Model\Query\SelectQuery;
 use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 
-class JoinStmtInterface implements JoinInterface
+class JoinStatement implements JoinInterface
 {
 
     /**
@@ -23,7 +24,7 @@ class JoinStmtInterface implements JoinInterface
 
     /**
      * Joining condition
-     * @var ConditionInterface
+     * @var ConditionInterface|null
      */
     protected ?ConditionInterface $condition = null;
 
@@ -52,7 +53,11 @@ class JoinStmtInterface implements JoinInterface
      */
     public function toSQL(): string
     {
-        $out = sprintf("%s JOIN %s", $this->type, $this->source);
+        if ($this->source instanceof QueryInterface) {
+            $out = sprintf("%s JOIN (%s)", $this->type, $this->source);            
+        } else {
+            $out = sprintf("%s JOIN %s", $this->type, $this->source);
+        }
         if ($this->alias) {
             $out .= " AS " . $this->alias;
         }

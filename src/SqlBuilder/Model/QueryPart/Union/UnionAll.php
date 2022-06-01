@@ -2,6 +2,7 @@
 
 namespace SqlBuilder\Model\QueryPart\Union;
 
+use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\SQLStatementInterface;
 
 /**
@@ -26,7 +27,8 @@ class UnionAll implements SQLStatementInterface
     /**
      * @inheritDoc
      */
-    public function toSQL(): string {
-        return implode(" UNION ALL ", $this->statements);
+    public function toSQL(): string
+    {
+        return "(" . SqlHelper::implodeStatements(") UNION ALL (", $this->statements) . ")";
     }
 }

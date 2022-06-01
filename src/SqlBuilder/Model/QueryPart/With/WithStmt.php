@@ -3,6 +3,7 @@
 namespace SqlBuilder\Model\QueryPart\With;
 
 use SqlBuilder\Facade\Select;
+use SqlBuilder\Model\Query\QueryInterface;
 use SqlBuilder\Model\Query\SelectQuery;
 use SqlBuilder\SQLStatementInterface;
 
@@ -38,8 +39,8 @@ class WithStmt implements SQLStatementInterface
      */
     public function toSQL(): string
     {
-        if ($this->data instanceof SelectQuery || $this->data instanceof Select) {
-            return sprintf("%s AS %s", $this->alias, $this->data);
+        if ($this->data instanceof QueryInterface) {
+            return sprintf("%s AS %s", $this->alias, "({$this->data->toSQL()})");
         }
         return sprintf("%s AS %s", $this->data, $this->alias);
     }

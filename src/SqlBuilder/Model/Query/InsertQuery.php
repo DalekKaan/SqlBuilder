@@ -124,9 +124,4 @@ class InsertQuery implements QueryInterface
         return $sql;
     }
 
-    public function __toString(): string
-    {
-        return "({$this->toSQL()})";
-    }
-
 }
