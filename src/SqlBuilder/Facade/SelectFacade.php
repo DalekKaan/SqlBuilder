@@ -4,9 +4,10 @@ namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Column\IColumn;
-use SqlBuilder\QueryPart\Join\CrossJoinStmt;
-use SqlBuilder\QueryPart\Join\JoinStmt;
+use SqlBuilder\QueryPart\Column\ColumnInterface;
+use SqlBuilder\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\QueryPart\Join\CrossJoinInterfaceStmt;
+use SqlBuilder\QueryPart\Join\JoinStmtInterface;
 use SqlBuilder\QueryPart\Order\OrderStmt;
 use SqlBuilder\QueryPart\Union\UnionAll;
 use SqlBuilder\QueryPart\With\WithStmt;
@@ -89,7 +90,7 @@ class SelectFacade
                 }
                 return new Select($source);
             }, $from);
-            return new self(new Select(new UnionAll($unionData)));
+            return new self(new Select((new UnionAll($unionData))->toSQL()));
         }
         return new self(new Select($from, $alias));
     }
@@ -187,7 +188,7 @@ class SelectFacade
     public function select(array $columns): self
     {
         foreach ($columns as $alias => $column) {
-            if ($column instanceof IColumn) {
+            if ($column instanceof ColumnInterface) {
                 $this->stmt->addColumn($column);
             } else if (is_array($column)) {
                 $this->stmt->addColumn(new Column($column[0], $column[1]));
@@ -247,7 +248,7 @@ class SelectFacade
      */
     public function leftJoin(string $table, ?string $as = null, $on = null): self
     {
-        return $this->join("LEFT", $table, $as, $on);
+        return $this->join("LEFT", $table, $as, SqlHelper::makeCondition($on));
     }
 
     /**
@@ -289,7 +290,7 @@ class SelectFacade
      */
     public function rightJoin(string $table, ?string $as = null, $on = null): self
     {
-        return $this->join("RIGHT", $table, $as, $on);
+        return $this->join("RIGHT", $table, $as, SqlHelper::makeCondition($on));
     }
 
     /**
@@ -331,7 +332,7 @@ class SelectFacade
      */
     public function innerJoin(string $table, ?string $as = null, $on = null): self
     {
-        return $this->join("INNER", $table, $as, $on);
+        return $this->join("INNER", $table, $as, SqlHelper::makeCondition($on));
     }
 
     /**
@@ -371,7 +372,7 @@ class SelectFacade
      */
     public function crossJoin(string $table, ?string $as = null): self
     {
-        $this->stmt->addJoin(new CrossJoinStmt($table, $as));
+        $this->stmt->addJoin(new CrossJoinInterfaceStmt($table, $as));
         return $this;
     }
 
@@ -409,12 +410,12 @@ class SelectFacade
      * @param string $type type of join ('LEFT', 'RIGHT', 'INNER', ...)
      * @param string $table table or subquery
      * @param string|null $as alias of joining table or subquery
-     * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
+     * @param ConditionInterface|null $on join condition. In case of `USING` statement must contain array of filed names,
      * @return self
      */
-    public function join(string $type, string $table, ?string $as = null, $on = null): self
+    public function join(string $type, string $table, ?string $as = null, ?ConditionInterface $on = null): self
     {
-        $this->stmt->addJoin(new JoinStmt($type, $table, $as, $on));
+        $this->stmt->addJoin(new JoinStmtInterface($type, $table, $as, $on));
         return $this;
     }
 
@@ -439,7 +440,7 @@ class SelectFacade
     public function groupBy(array $fields): self
     {
         foreach ($fields as $field) {
-            $this->stmt->addGroupBy($field);
+            $this->stmt->addGroupBy(new Column($field));
         }
         return $this;
     }
@@ -607,7 +608,7 @@ class SelectFacade
      */
     public function buildSql(): string
     {
-        return $this->stmt->buildSql();
+        return $this->stmt->toSQL();
     }
 
     public function __toString()

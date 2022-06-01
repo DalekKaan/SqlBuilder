@@ -4,7 +4,7 @@ namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
 use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Condition\ConditionStmt;
+use SqlBuilder\QueryPart\Condition\Condition;
 use SqlBuilder\Select;
 
 class SelectFacadeTest extends TestCase
@@ -28,7 +28,7 @@ class SelectFacadeTest extends TestCase
                 new Column("Field3", "F3")
             ])
             ->where([
-                new ConditionStmt('Field1', '>', 20),
+                new Condition('Field1', '>', 20),
                 ['AND', 'Field2', '=', 15]
             ])
             ->limit(50, 450)
@@ -159,7 +159,7 @@ class SelectFacadeTest extends TestCase
             ["R.Name", "Role"],
             ["O.ID", "OrderID"]
         ])
-            ->leftJoin("Departments", "D", new ConditionStmt('U.DepartmentID', '=', 'D.ID'))
+            ->leftJoin("Departments", "D", new Condition('U.DepartmentID', '=', 'D.ID'))
             ->rightJoin(new Select("Roles"), "R", 'U.RoleID = R.ID')
             ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
 
@@ -176,9 +176,9 @@ class SelectFacadeTest extends TestCase
     {
         $facade = new SelectFacade(new Select("ExampleTable"));
         $facade->where([
-            new ConditionStmt('Field1', '>', 20),
+            new Condition('Field1', '>', 20),
             ['AND', 'Field2', '=', 15],
-            new ConditionStmt('Field3', 'IN', [1, '4', 5, 'str', true])
+            new Condition('Field3', 'IN', [1, '4', 5, 'str', true])
         ]);
 
         $this->assertSame(

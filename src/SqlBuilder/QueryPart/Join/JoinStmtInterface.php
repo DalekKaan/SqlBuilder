@@ -2,9 +2,11 @@
 
 namespace SqlBuilder\QueryPart\Join;
 
+use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\QueryPart\Condition\ConditionInterface;
 use SqlBuilder\Select;
 
-class JoinStmt implements IJoin
+class JoinStmtInterface implements JoinInterface
 {
 
     /**
@@ -21,9 +23,9 @@ class JoinStmt implements IJoin
 
     /**
      * Joining condition
-     * @var string|array
+     * @var ConditionInterface
      */
-    protected $condition = null;
+    protected ?ConditionInterface $condition = null;
 
     /**
      * Alias of joining objet
@@ -35,9 +37,9 @@ class JoinStmt implements IJoin
      * @param string $type join type: "LEFT", "RIGHT", "INNER", etc.
      * @param string $source table or sub query to join
      * @param string|null $alias alias for joined table
-     * @param string|array $condition join condition 
+     * @param ConditionInterface|null $condition join condition 
      */
-    public function __construct(string $type, string $source, ?string $alias = null, $condition = null)
+    public function __construct(string $type, string $source, ?string $alias = null, ?ConditionInterface $condition = null)
     {
         $this->type = $type;
         $this->source = $source;
@@ -45,7 +47,10 @@ class JoinStmt implements IJoin
         $this->condition = $condition;
     }
 
-    public function __toString()
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         $out = sprintf("%s JOIN %s", $this->type, $this->source);
         if ($this->alias) {
@@ -53,9 +58,9 @@ class JoinStmt implements IJoin
         }
         if ($this->condition) {
             if (is_array($this->condition)) {
-                $out .= " USING (" . implode(", ", $this->condition) . ")";
+                $out .= " USING (" . SqlHelper::implodeStatements(", ", $this->condition) . ")";
             } else {
-                $out .= " ON (" . $this->condition . ")";
+                $out .= " ON (" . $this->condition->toSQL() . ")";
             }
         }
         return $out;

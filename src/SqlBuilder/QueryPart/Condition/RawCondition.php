@@ -5,7 +5,7 @@ namespace SqlBuilder\QueryPart\Condition;
 /**
  * Simple string condition
  */
-class SimpleCondition implements ICondition
+class RawCondition implements ConditionInterface
 {
     /**
      * Condition
@@ -32,7 +32,7 @@ class SimpleCondition implements ICondition
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function toSQL(): string
     {
         return $this->condition;
     }

@@ -4,11 +4,12 @@ namespace SqlBuilder\QueryPart\With;
 
 use SqlBuilder\Facade\SelectFacade;
 use SqlBuilder\Select;
+use SqlBuilder\SqlStatementInterface;
 
 /**
  * "With" SQL statement
  */
-class WithStmt
+class WithStmt implements SqlStatementInterface
 {
     /**
      * Data
@@ -31,8 +32,11 @@ class WithStmt
         $this->data = $data;
         $this->alias = $alias;
     }
-    
-    public function __toString()
+
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         if ($this->data instanceof Select || $this->data instanceof SelectFacade) {
             return sprintf("%s AS %s", $this->alias, $this->data);

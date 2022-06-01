@@ -5,7 +5,7 @@ namespace SqlBuilder\QueryPart\Join;
 /**
  * Cross join
  */
-class CrossJoinStmt implements IJoin
+class CrossJoinInterfaceStmt implements JoinInterface
 {
     /**
      * Object to join
@@ -30,7 +30,10 @@ class CrossJoinStmt implements IJoin
     }
 
 
-    public function __toString()
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         return sprintf("CROSS JOIN %s AS %s", $this->source, $this->alias);
     }

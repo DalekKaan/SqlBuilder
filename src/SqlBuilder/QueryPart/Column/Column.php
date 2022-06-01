@@ -5,17 +5,17 @@ namespace SqlBuilder\QueryPart\Column;
 /**
  * Column
  */
-class Column implements IColumn
+class Column implements ColumnInterface
 {
     /**
      * Expression
      * @var string
      */
     protected string $expression;
-    
+
     /**
      * Alias
-     * @var string|null 
+     * @var string|null
      */
     protected ?string $alias = null;
 
@@ -29,12 +29,25 @@ class Column implements IColumn
         $this->alias = $alias;
     }
 
-
-    public function __toString() {
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
+    {
         $out = $this->expression;
         if ($this->alias) {
             $out .= " AS " . $this->alias;
         }
         return $out;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return $this->alias ?? $this->expression;
+    }
+
+
 }

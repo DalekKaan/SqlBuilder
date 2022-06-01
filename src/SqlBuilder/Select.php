@@ -2,17 +2,18 @@
 
 namespace SqlBuilder;
 
+use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Column\IColumn;
-use SqlBuilder\QueryPart\Condition\ICondition;
-use SqlBuilder\QueryPart\Join\IJoin;
+use SqlBuilder\QueryPart\Column\ColumnInterface;
+use SqlBuilder\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\QueryPart\Join\JoinInterface;
 use SqlBuilder\QueryPart\Order\OrderStmt;
 use SqlBuilder\QueryPart\With\WithStmt;
 
 /**
  * `SELECT` statement
  */
-class Select
+class Select implements SqlStatementInterface
 {
     /**
      * "WITH" statements
@@ -29,7 +30,7 @@ class Select
      * From clause
      * @var string
      */
-    protected string $source;
+    protected string $from;
 
     /**
      * Alias of FROM
@@ -39,19 +40,19 @@ class Select
 
     /**
      * Joins
-     * @var string[]
+     * @var JoinInterface[]
      */
     protected array $joins = [];
 
     /**
      * Where conditions
-     * @var string|null
+     * @var ConditionInterface|null
      */
-    protected ?string $where = null;
+    protected ?ConditionInterface $where = null;
 
     /**
      * Order by columns
-     * @var string[]
+     * @var OrderStmt[]
      */
     protected array $orderBy = [];
 
@@ -63,16 +64,9 @@ class Select
 
     /**
      * "Having" conditions
-     * @var string|null
+     * @var ConditionInterface|null
      */
-    protected ?string $having = null;
-
-    /**
-     * "Limit by" statements
-     * @var string|null
-     * @deprecated for ClickHouse only
-     */
-    protected ?string $limitBy = null;
+    protected ?ConditionInterface $having = null;
 
     /**
      * Limit
@@ -87,15 +81,12 @@ class Select
     protected ?int $offset = null;
 
     /**
-     * @param Select|string $from table or sub query
+     * @param string $from table or sub query
      * @param string|null $alias source alias
      */
-    public function __construct($from, ?string $alias = null)
+    public function __construct(string $from, ?string $alias = null)
     {
-        if (is_string($from)) {
-            $from = trim($from);
-        }
-        $this->source = $from;
+        $this->from = $from;
         if ($alias !== null) {
             $this->alias = trim($alias);
         }
@@ -103,10 +94,10 @@ class Select
 
     /**
      * Add "WITH" statement
-     * @param string|WithStmt $with
+     * @param WithStmt $with
      * @return self
      */
-    public function addWith(string $with): self
+    public function addWith(WithStmt $with): self
     {
         $this->with[] = $with;
         return $this;
@@ -114,10 +105,10 @@ class Select
 
     /**
      * Add column
-     * @param string|IColumn $column
+     * @param ColumnInterface $column
      * @return self
      */
-    public function addColumn(string $column): self
+    public function addColumn(ColumnInterface $column): self
     {
         if ($this->columns === null) {
             $this->columns = [];
@@ -128,21 +119,21 @@ class Select
 
     /**
      * Add group by statement
-     * @param string|Column $column
+     * @param ColumnInterface $column
      * @return self
      */
-    public function addGroupBy(string $column): self
+    public function addGroupBy(ColumnInterface $column): self
     {
-        $this->groupBy[] = $column;
+        $this->groupBy[] = $column->getName();
         return $this;
     }
 
     /**
      * Set having condition
-     * @param string|ICondition $condition
+     * @param ConditionInterface $condition
      * @return self
      */
-    public function setHawing(string $condition): self
+    public function setHawing(ConditionInterface $condition): self
     {
         $this->having = $condition;
         return $this;
@@ -150,10 +141,10 @@ class Select
 
     /**
      * Set where condition
-     * @param string|ICondition $condition
+     * @param ConditionInterface $condition
      * @return self
      */
-    public function setWhere(string $condition): self
+    public function setWhere(ConditionInterface $condition): self
     {
         $this->where = $condition;
         return $this;
@@ -161,10 +152,10 @@ class Select
 
     /**
      * Add join condition
-     * @param string|IJoin $join
+     * @param JoinInterface $join
      * @return self
      */
-    public function addJoin(string $join): self
+    public function addJoin(JoinInterface $join): self
     {
         $this->joins[] = $join;
         return $this;
@@ -172,10 +163,10 @@ class Select
 
     /**
      * Add order by statement
-     * @param string|OrderStmt $orderStatement
+     * @param OrderStmt $orderStatement
      * @return self
      */
-    public function addOrderBy(string $orderStatement): self
+    public function addOrderBy(OrderStmt $orderStatement): self
     {
         $this->orderBy[] = $orderStatement;
         return $this;
@@ -207,38 +198,39 @@ class Select
      * Build SQL
      * @return string
      */
-    public function buildSql(): string
+    public function toSQL(): string
     {
         $sqlParts = [];
         // prepare with
 
         if ($this->with) {
-            $sqlParts['with'] = "WITH " . implode(", ", $this->with);
+            
+            $sqlParts['with'] = "WITH " . SqlHelper::implodeStatements(", ", $this->with);
         }
 
         // prepare columns
         if ($this->columns === null) {
             $columnsStatement = "*";
         } else {
-            $columnsStatement = implode(", ", $this->columns);
+            $columnsStatement = SqlHelper::implodeStatements(", ", $this->columns);
         }
         $sqlParts['select'] = "SELECT " . $columnsStatement;
 
         // prepare source
-        $sqlParts['from'] = "FROM " . $this->source;
+        $sqlParts['from'] = "FROM " . $this->from;
         if ($this->alias !== null) {
             $sqlParts['from'] .= " AS " . $this->alias;
         }
 
         // prepare joins
         if ($this->joins) {
-            $joinsStatement = implode(" ", $this->joins);
+            $joinsStatement = SqlHelper::implodeStatements(" ", $this->joins);
             $sqlParts['joins'] = $joinsStatement;
         }
 
         // prepare where
         if ($this->where) {
-            $sqlParts['where'] = "WHERE " . $this->where;
+            $sqlParts['where'] = "WHERE " . $this->where->toSQL();
         }
 
         // prepare group by
@@ -248,13 +240,13 @@ class Select
 
             // Prepare having
             if ($this->having !== null) {
-                $sqlParts['having'] = "HAVING " . $this->having;
+                $sqlParts['having'] = "HAVING " . $this->having->toSQL();
             }
         }
 
         // prepare order by
         if ($this->orderBy) {
-            $orderByStatement = implode(", ", $this->orderBy);
+            $orderByStatement = SqlHelper::implodeStatements(", ", $this->orderBy);
             $sqlParts['orderBy'] = "ORDER BY " . $orderByStatement;
         }
 
@@ -273,7 +265,7 @@ class Select
 
     public function __toString()
     {
-        return "({$this->buildSql()})";
+        return "({$this->toSQL()})";
     }
 
 

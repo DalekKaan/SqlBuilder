@@ -3,9 +3,10 @@
 namespace SqlBuilder\Helpers;
 
 use SqlBuilder\QueryPart\Condition\ConditionsGroup;
-use SqlBuilder\QueryPart\Condition\ConditionStmt;
-use SqlBuilder\QueryPart\Condition\ICondition;
-use SqlBuilder\QueryPart\Condition\SimpleCondition;
+use SqlBuilder\QueryPart\Condition\Condition;
+use SqlBuilder\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\QueryPart\Condition\RawCondition;
+use SqlBuilder\SqlStatementInterface;
 
 /**
  * SQL helper
@@ -16,17 +17,28 @@ class SqlHelper
      * Representation of `true` value
      */
     protected const VALUE_TRUE = 'TRUE';
-    
+
     /**
      * Representation of `false` value
      */
     protected const VALUE_FALSE = 'FALSE';
-    
+
     /**
      * Representation of `null` value
      */
     protected const VALUE_NULL = 'NULL';
-    
+
+    /**
+     * Implode SQL statements with separator
+     * @param string $separator separator
+     * @param array $statements statements
+     * @return string
+     */
+    public static function implodeStatements(string $separator, array $statements): string
+    {
+        return implode($separator, array_map(static fn(SqlStatementInterface $statement) => $statement->toSQL(), $statements));
+    }
+
     /**
      * Present scalar data for SQL
      * @param mixed $value
@@ -67,10 +79,11 @@ class SqlHelper
     /**
      * Make condition
      * @param mixed $data
-     * @return ICondition
+     * @return ConditionInterface
      */
-    public static function makeCondition($data): ICondition {
-        if ($data instanceof ICondition) {
+    public static function makeCondition($data): ConditionInterface
+    {
+        if ($data instanceof ConditionInterface) {
             return $data;
         }
 
@@ -92,28 +105,29 @@ class SqlHelper
             }
             return $conditionGroup;
         }
-        return new SimpleCondition($data);
+        return new RawCondition($data);
     }
 
     /**
      * Make condition from array
      * @param array $data data for condition
-     * @return ICondition
+     * @return ConditionInterface
      */
-    protected static function makeConditionFromArray(array $data): ICondition {
+    protected static function makeConditionFromArray(array $data): ConditionInterface
+    {
         $count = count($data);
-        
+
         switch ($count) {
             case 0:
-                return new SimpleCondition("TRUE");
+                return new RawCondition("TRUE");
             case 1:
-                return new ConditionStmt($data[0], '=', self::VALUE_TRUE);
+                return new Condition($data[0], '=', self::VALUE_TRUE);
             case 2:
-                return new ConditionStmt($data[0], '=', $data[1]);
+                return new Condition($data[0], '=', $data[1]);
             case 3:
-                return new ConditionStmt($data[0], $data[1], $data[2]);
+                return new Condition($data[0], $data[1], $data[2]);
             default:
-                return new ConditionStmt($data[1], $data[2], $data[3], $data[0]);
+                return new Condition($data[1], $data[2], $data[3], $data[0]);
         }
     }
 }

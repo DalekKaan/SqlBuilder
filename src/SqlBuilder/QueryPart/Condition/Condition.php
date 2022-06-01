@@ -4,7 +4,7 @@ namespace SqlBuilder\QueryPart\Condition;
 
 use SqlBuilder\Helpers\SqlHelper;
 
-class ConditionStmt implements ICondition
+class Condition implements ConditionInterface
 {
     /**
      * Operator
@@ -57,7 +57,10 @@ class ConditionStmt implements ICondition
     }
 
 
-    public function __toString()
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         return sprintf("(%s %s %s)", $this->leftSide, $this->operator, $this->rightSide);
     }

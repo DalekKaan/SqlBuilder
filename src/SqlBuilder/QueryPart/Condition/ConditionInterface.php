@@ -2,15 +2,13 @@
 
 namespace SqlBuilder\QueryPart\Condition;
 
+use SqlBuilder\SqlStatementInterface;
+
 /**
  * SQL condition
  */
-interface ICondition
+interface ConditionInterface extends SqlStatementInterface
 {
-    /**
-     * Make SQL condition string
-     */
-    public function __toString();
 
     /**
      * get logic for join to others conditions 

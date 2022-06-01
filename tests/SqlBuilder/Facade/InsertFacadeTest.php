@@ -4,6 +4,7 @@ namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
 use SqlBuilder\Insert;
+use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\Select;
 
 /**
@@ -28,12 +29,12 @@ class InsertFacadeTest extends TestCase
         self::assertEquals("INSERT INTO Users (name, surname, age) VALUES ('John', 'Smith', 25), ('Alan', 'Clark')", $stmt->buildSQL());
         
         $select = new Select("Clients");
-        $select->addColumn('name');
-        $select->addColumn('surname');
-        $select->addColumn('age');
+        $select->addColumn(new Column('name'));
+        $select->addColumn(new Column('surname'));
+        $select->addColumn(new Column('age'));
         $stmt = InsertFacade::into('Users', ['name', 'surname', 'age'],
             $select);        
-        self::assertEquals("INSERT INTO Users (name, surname, age) (SELECT name, surname, age FROM Clients)", $stmt->buildSQL());
+        self::assertEquals("INSERT INTO Users (name, surname, age) SELECT name, surname, age FROM Clients", $stmt->buildSQL());
     }
 
     /**

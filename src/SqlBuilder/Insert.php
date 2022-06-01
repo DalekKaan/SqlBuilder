@@ -7,7 +7,7 @@ use SqlBuilder\Helpers\SqlHelper;
 /**
  * `INSERT` statement
  */
-class Insert
+class Insert implements SqlStatementInterface
 {
     /**
      * Target
@@ -29,9 +29,9 @@ class Insert
 
     /**
      * Select to insert
-     * @var string|null
+     * @var Select|null
      */
-    protected ?string $select = null;
+    protected ?Select $select = null;
 
     /**
      * @param string $target target
@@ -94,10 +94,10 @@ class Insert
 
     /**
      * Set select query
-     * @param string $select
+     * @param Select $select
      * @return $this
      */
-    public function setSelect(string $select): self
+    public function setSelect(Select $select): self
     {
         $this->select = $select;
         return $this;
@@ -107,14 +107,14 @@ class Insert
      * To SQL
      * @return string
      */
-    public function buildSql(): string
+    public function toSQL(): string
     {
         $sql = "INSERT INTO {$this->target}";
         if ($this->columns !== null) {
             $sql .= " (" . implode(", ", $this->columns) . ")";
         }
         if ($this->select !== null) {
-            $sql .= " " . $this->select;
+            $sql .= " " . $this->select->toSQL();
         } elseif (count($this->values) > 0) {
             $values = array_map(static fn($row) => SqlHelper::scalarToSQL($row), $this->values);
             $sql .= " VALUES ". implode(", ", $values);
@@ -126,7 +126,7 @@ class Insert
 
     public function __toString(): string
     {
-        return "({$this->buildSql()})";
+        return "({$this->toSQL()})";
     }
 
 }

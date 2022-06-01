@@ -30,8 +30,6 @@ class InsertFacade
                 $stmt->setSelect($data);
             }elseif ($data instanceof SelectFacade) {
                 $stmt->setSelect($data->getStatement());
-            } elseif (is_string($data)) {
-                $stmt->setSelect($data);
             } else {
                 trigger_error("Wrong data type", E_USER_NOTICE);
             }
@@ -67,19 +65,19 @@ class InsertFacade
 
     /**
      * Set select statement
-     * @param string $select select statement
+     * @param Select $select select statement
      * @return void
      */
-    public function select(string $select): void {
+    public function select(Select $select): void {
         $this->stmt->setSelect($select);
     }
 
     /**
      * Set from select statement
-     * @param string $select select statement
+     * @param Select $select select statement
      * @return void
      */
-    public function from(string $select): void {
+    public function from(Select $select): void {
         $this->select($select);
     }
 
@@ -88,7 +86,7 @@ class InsertFacade
      * @return string
      */
     public function buildSQL(): string {
-        return $this->stmt->buildSql();
+        return $this->stmt->toSQL();
     }
     
     public function __toString():string

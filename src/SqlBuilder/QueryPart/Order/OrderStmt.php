@@ -2,10 +2,12 @@
 
 namespace SqlBuilder\QueryPart\Order;
 
+use SqlBuilder\SqlStatementInterface;
+
 /**
  * Order statement
  */
-class OrderStmt
+class OrderStmt implements SqlStatementInterface
 {
     /**
      * Ordering direction - asc
@@ -38,8 +40,11 @@ class OrderStmt
         $this->column = $column;
         $this->direction = $direction;
     }
-    
-    public function __toString()
+
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         return sprintf("%s %s", $this->column, $this->direction);
     }

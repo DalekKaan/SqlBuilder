@@ -2,10 +2,12 @@
 
 namespace SqlBuilder\QueryPart\Union;
 
+use SqlBuilder\SqlStatementInterface;
+
 /**
  * `UNION` statement
  */
-class Union
+class Union implements SqlStatementInterface
 {
     /**
      * `SELECT` statements
@@ -21,7 +23,11 @@ class Union
         $this->statements = $statements;
     }
 
-    public function __toString(): string {
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
+    {
         return implode(" UNION ", $this->statements);
     }
 }

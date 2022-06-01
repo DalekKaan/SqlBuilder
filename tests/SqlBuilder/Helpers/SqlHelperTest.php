@@ -3,7 +3,7 @@
 namespace SqlBuilder\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\QueryPart\Condition\ConditionStmt;
+use SqlBuilder\QueryPart\Condition\Condition;
 
 class SqlHelperTest extends TestCase
 {
@@ -54,7 +54,7 @@ class SqlHelperTest extends TestCase
      */
     public function testMakeCondition($condition, $expected): void
     {
-        $this->assertEquals($expected, (string)SqlHelper::makeCondition($condition));
+        $this->assertEquals($expected, SqlHelper::makeCondition($condition)->toSQL());
     }
 
     public function getConditions(): array
@@ -65,7 +65,7 @@ class SqlHelperTest extends TestCase
                 "(Field = 15)"
             ],
             [
-                new ConditionStmt("Field", "IN", [1, 2, '3', 4, 5, true]),
+                new Condition("Field", "IN", [1, 2, '3', 4, 5, true]),
                 "(Field IN (1, 2, '3', 4, 5, TRUE))"
             ]
         ];

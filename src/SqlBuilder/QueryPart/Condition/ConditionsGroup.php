@@ -5,11 +5,11 @@ namespace SqlBuilder\QueryPart\Condition;
 /**
  * Group of conditions
  */
-class ConditionsGroup implements ICondition
+class ConditionsGroup implements ConditionInterface
 {
     /**
      * Conditions
-     * @var ICondition[]
+     * @var ConditionInterface[]
      */
     protected array $conditions;
 
@@ -20,7 +20,7 @@ class ConditionsGroup implements ICondition
     protected string $joinedBy = "AND";
 
     /**
-     * @param ICondition[] $conditions
+     * @param ConditionInterface[] $conditions
      * @param string $joinedBy logic for joining to others conditions
      */
     public function __construct(array $conditions, string $joinedBy = "AND")
@@ -39,16 +39,19 @@ class ConditionsGroup implements ICondition
 
     /**
      * Add condition to group
-     * @param ICondition $condition
+     * @param ConditionInterface $condition
      * @return self
      */
-    public function addCondition(ICondition $condition): self
+    public function addCondition(ConditionInterface $condition): self
     {
         $this->conditions[] = $condition;
         return $this;
     }
 
-    public function __toString()
+    /**
+     * @inheritDoc
+     */
+    public function toSQL(): string
     {
         if (!$this->conditions) {
             return "";
@@ -59,7 +62,7 @@ class ConditionsGroup implements ICondition
             if ($index !== 0) {
                 $out .= " " . $condition->getJoinedBy() . " ";
             }
-            $out .= $condition;
+            $out .= $condition->toSQL();
         }
         $out .= ")";
         return $out;
