@@ -5,7 +5,7 @@ namespace SqlBuilder\Model\QueryPart\Join;
 /**
  * Cross join
  */
-class CrossJoinInterfaceStmt implements JoinInterface
+class CrossJoinStatement implements JoinInterface
 {
     /**
      * Object to join

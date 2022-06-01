@@ -7,7 +7,7 @@ use SqlBuilder\SQLStatementInterface;
 /**
  * Order statement
  */
-class OrderStmt implements SQLStatementInterface
+class OrderStatement implements SQLStatementInterface
 {
     /**
      * Ordering direction - asc

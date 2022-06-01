@@ -8,11 +8,11 @@ use SqlBuilder\Model\Query\SelectQuery;
 use SqlBuilder\Model\QueryPart\Column\Column;
 use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\Model\QueryPart\Join\CrossJoinInterfaceStmt;
+use SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
 use SqlBuilder\Model\QueryPart\Join\JoinStatement;
-use SqlBuilder\Model\QueryPart\Order\OrderStmt;
+use SqlBuilder\Model\QueryPart\Order\OrderStatement;
 use SqlBuilder\Model\QueryPart\Union\UnionAll;
-use SqlBuilder\Model\QueryPart\With\WithStmt;
+use SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * Facade for query.
@@ -134,10 +134,10 @@ class Select extends AbstractQueryFacade
     public function with(array $with): self
     {
         foreach ($with as $alias => $data) {
-            if ($data instanceof WithStmt) {
+            if ($data instanceof WithStatement) {
                 $this->stmt->addWith($data);
             } else {
-                $this->stmt->addWith(new WithStmt($data, $alias));
+                $this->stmt->addWith(new WithStatement($data, $alias));
             }
         }
         return $this;
@@ -367,7 +367,10 @@ class Select extends AbstractQueryFacade
      */
     public function crossJoin($table, ?string $as = null): self
     {
-        $this->stmt->addJoin(new CrossJoinInterfaceStmt($table, $as));
+        if ($table instanceof QueryInterface) {
+            $table = "({$table->toSQL()})";
+        }
+        $this->stmt->addJoin(new CrossJoinStatement($table, $as));
         return $this;
     }
 
@@ -589,12 +592,12 @@ class Select extends AbstractQueryFacade
     public function orderBy(array $fields): self
     {
         foreach ($fields as $field) {
-            if ($field instanceof OrderStmt) {
+            if ($field instanceof OrderStatement) {
                 $this->stmt->addOrderBy($field);
             } elseif (is_array($field)) {
-                $this->stmt->addOrderBy(new OrderStmt($field[0], $field[1] ?? OrderStmt::DIRECTION_ASC));
+                $this->stmt->addOrderBy(new OrderStatement($field[0], $field[1] ?? OrderStatement::DIRECTION_ASC));
             } else {
-                $this->stmt->addOrderBy(new OrderStmt($field));
+                $this->stmt->addOrderBy(new OrderStatement($field));
             }
         }
         return $this;

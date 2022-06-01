@@ -7,8 +7,8 @@ use SqlBuilder\Model\QueryPart\Column\Column;
 use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use SqlBuilder\Model\QueryPart\Join\JoinInterface;
-use SqlBuilder\Model\QueryPart\Order\OrderStmt;
-use SqlBuilder\Model\QueryPart\With\WithStmt;
+use SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * `SELECT` statement
@@ -17,7 +17,7 @@ class SelectQuery implements QueryInterface
 {
     /**
      * "WITH" statements
-     * @var WithStmt[]
+     * @var WithStatement[]
      */
     protected array $with = [];
     /**
@@ -52,7 +52,7 @@ class SelectQuery implements QueryInterface
 
     /**
      * Order by columns
-     * @var OrderStmt[]
+     * @var OrderStatement[]
      */
     protected array $orderBy = [];
 
@@ -94,10 +94,10 @@ class SelectQuery implements QueryInterface
 
     /**
      * Add "WITH" statement
-     * @param WithStmt $with
+     * @param WithStatement $with
      * @return self
      */
-    public function addWith(WithStmt $with): self
+    public function addWith(WithStatement $with): self
     {
         $this->with[] = $with;
         return $this;
@@ -163,10 +163,10 @@ class SelectQuery implements QueryInterface
 
     /**
      * Add order by statement
-     * @param OrderStmt $orderStatement
+     * @param OrderStatement $orderStatement
      * @return self
      */
-    public function addOrderBy(OrderStmt $orderStatement): self
+    public function addOrderBy(OrderStatement $orderStatement): self
     {
         $this->orderBy[] = $orderStatement;
         return $this;

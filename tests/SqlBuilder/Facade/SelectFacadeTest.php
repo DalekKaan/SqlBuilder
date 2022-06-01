@@ -161,10 +161,16 @@ class SelectFacadeTest extends TestCase
         ])
             ->leftJoin("Departments", "D", new Condition('U.DepartmentID', '=', 'D.ID'))
             ->rightJoin(new SelectQuery("Roles"), "R", 'U.RoleID = R.ID')
-            ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
+            ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID')
+            ->crossJoin(new SelectQuery("Roles"), "C");
 
         $this->assertSame(
-            "SELECT U.Login, D.Name AS Department, R.Name AS Role, O.ID AS OrderID FROM Users AS U LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) INNER JOIN (SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31') AS O ON (U.ID = O.UserID)",
+            "SELECT U.Login, D.Name AS Department, R.Name AS Role, O.ID AS OrderID "
+            ."FROM Users AS U "
+            ."LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) "
+            ."RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) "
+            ."INNER JOIN (SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31') AS O ON (U.ID = O.UserID) "
+            ."CROSS JOIN (SELECT * FROM Roles) AS C",
             $facade->toSql()
         );
     }

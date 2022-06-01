@@ -2,7 +2,6 @@
 
 namespace SqlBuilder\Model\QueryPart\With;
 
-use SqlBuilder\Facade\Select;
 use SqlBuilder\Model\Query\QueryInterface;
 use SqlBuilder\Model\Query\SelectQuery;
 use SqlBuilder\SQLStatementInterface;
@@ -10,7 +9,7 @@ use SqlBuilder\SQLStatementInterface;
 /**
  * "With" SQL statement
  */
-class WithStmt implements SQLStatementInterface
+class WithStatement implements SQLStatementInterface
 {
     /**
      * Data
