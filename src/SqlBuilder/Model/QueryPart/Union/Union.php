@@ -1,13 +1,13 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Union;
+namespace SqlBuilder\Model\QueryPart\Union;
 
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * `UNION` statement
  */
-class Union implements SqlStatementInterface
+class Union implements SQLStatementInterface
 {
     /**
      * `SELECT` statements

@@ -1,20 +1,19 @@
 <?php
 
-namespace SqlBuilder\Query;
+namespace SqlBuilder\Model\Query;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Column\ColumnInterface;
-use SqlBuilder\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\QueryPart\Join\JoinInterface;
-use SqlBuilder\QueryPart\Order\OrderStmt;
-use SqlBuilder\QueryPart\With\WithStmt;
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\Model\QueryPart\Column\Column;
+use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
+use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\Model\QueryPart\Join\JoinInterface;
+use SqlBuilder\Model\QueryPart\Order\OrderStmt;
+use SqlBuilder\Model\QueryPart\With\WithStmt;
 
 /**
  * `SELECT` statement
  */
-class SelectQuery implements SqlStatementInterface
+class SelectQuery implements QueryInterface
 {
     /**
      * "WITH" statements

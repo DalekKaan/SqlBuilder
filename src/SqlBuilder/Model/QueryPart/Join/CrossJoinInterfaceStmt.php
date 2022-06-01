@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Join;
+namespace SqlBuilder\Model\QueryPart\Join;
 
 /**
  * Cross join

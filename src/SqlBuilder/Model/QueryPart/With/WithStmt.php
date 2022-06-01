@@ -1,15 +1,15 @@
 <?php
 
-namespace SqlBuilder\QueryPart\With;
+namespace SqlBuilder\Model\QueryPart\With;
 
 use SqlBuilder\Facade\Select;
-use SqlBuilder\Query\SelectQuery;
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\Model\Query\SelectQuery;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * "With" SQL statement
  */
-class WithStmt implements SqlStatementInterface
+class WithStmt implements SQLStatementInterface
 {
     /**
      * Data

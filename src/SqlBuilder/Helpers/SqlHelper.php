@@ -2,11 +2,11 @@
 
 namespace SqlBuilder\Helpers;
 
-use SqlBuilder\QueryPart\Condition\ConditionsGroup;
-use SqlBuilder\QueryPart\Condition\Condition;
-use SqlBuilder\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\QueryPart\Condition\RawCondition;
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\Model\QueryPart\Condition\Condition;
+use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
+use SqlBuilder\Model\QueryPart\Condition\RawCondition;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL helper
@@ -36,7 +36,7 @@ class SqlHelper
      */
     public static function implodeStatements(string $separator, array $statements): string
     {
-        return implode($separator, array_map(static fn(SqlStatementInterface $statement) => $statement->toSQL(), $statements));
+        return implode($separator, array_map(static fn(SQLStatementInterface $statement) => $statement->toSQL(), $statements));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Column;
+namespace SqlBuilder\Model\QueryPart\Column;
 
 /**
  * Column

@@ -1,13 +1,13 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Condition;
+namespace SqlBuilder\Model\QueryPart\Condition;
 
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL condition
  */
-interface ConditionInterface extends SqlStatementInterface
+interface ConditionInterface extends SQLStatementInterface
 {
 
     /**

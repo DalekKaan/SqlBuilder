@@ -1,13 +1,13 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Order;
+namespace SqlBuilder\Model\QueryPart\Order;
 
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * Order statement
  */
-class OrderStmt implements SqlStatementInterface
+class OrderStmt implements SQLStatementInterface
 {
     /**
      * Ordering direction - asc

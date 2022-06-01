@@ -5,7 +5,7 @@ namespace SqlBuilder;
 /**
  * SQL statement
  */
-interface SqlStatementInterface
+interface SQLStatementInterface
 {
     /**
      * Convert to SQL

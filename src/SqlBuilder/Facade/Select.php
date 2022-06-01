@@ -3,15 +3,16 @@
 namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Query\SelectQuery;
-use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Column\ColumnInterface;
-use SqlBuilder\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\QueryPart\Join\CrossJoinInterfaceStmt;
-use SqlBuilder\QueryPart\Join\JoinStmtInterface;
-use SqlBuilder\QueryPart\Order\OrderStmt;
-use SqlBuilder\QueryPart\Union\UnionAll;
-use SqlBuilder\QueryPart\With\WithStmt;
+use SqlBuilder\Model\Query\QueryInterface;
+use SqlBuilder\Model\Query\SelectQuery;
+use SqlBuilder\Model\QueryPart\Column\Column;
+use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
+use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\Model\QueryPart\Join\CrossJoinInterfaceStmt;
+use SqlBuilder\Model\QueryPart\Join\JoinStmtInterface;
+use SqlBuilder\Model\QueryPart\Order\OrderStmt;
+use SqlBuilder\Model\QueryPart\Union\UnionAll;
+use SqlBuilder\Model\QueryPart\With\WithStmt;
 
 /**
  * Facade for query.
@@ -65,13 +66,13 @@ class Select
 {
     /**
      * Query
-     * @var SelectQuery
+     * @var QueryInterface
      */
-    protected SelectQuery $stmt;
+    protected QueryInterface $stmt;
 
     /**
      * Create facade with new query
-     * @param SelectQuery|array|string $from table or sub query
+     * @param QueryInterface|array|string $from table or sub query
      * @param string|null $alias source alias
      * @return static
      */
@@ -85,7 +86,7 @@ class Select
                 if ($source instanceof self) {
                     return $source->getStatement();
                 }
-                if ($source instanceof SelectQuery) {
+                if ($source instanceof QueryInterface) {
                     return $source;
                 }
                 return new SelectQuery($source);

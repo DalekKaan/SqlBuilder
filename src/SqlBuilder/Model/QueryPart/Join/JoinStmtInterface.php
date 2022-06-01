@@ -1,10 +1,10 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Join;
+namespace SqlBuilder\Model\QueryPart\Join;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Query\SelectQuery;
-use SqlBuilder\QueryPart\Condition\ConditionInterface;
+use SqlBuilder\Model\Query\SelectQuery;
+use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 
 class JoinStmtInterface implements JoinInterface
 {

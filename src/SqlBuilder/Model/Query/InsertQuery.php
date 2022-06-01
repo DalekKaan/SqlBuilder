@@ -1,14 +1,13 @@
 <?php
 
-namespace SqlBuilder\Query;
+namespace SqlBuilder\Model\Query;
 
 use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\SqlStatementInterface;
 
 /**
  * `INSERT` statement
  */
-class InsertQuery implements SqlStatementInterface
+class InsertQuery implements QueryInterface
 {
     /**
      * Target

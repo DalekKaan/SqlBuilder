@@ -1,13 +1,13 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Column;
+namespace SqlBuilder\Model\QueryPart\Column;
 
-use SqlBuilder\SqlStatementInterface;
+use SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL column
  */
-interface ColumnInterface extends SqlStatementInterface
+interface ColumnInterface extends SQLStatementInterface
 {
     /**
      * Get name of the column

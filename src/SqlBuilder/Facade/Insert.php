@@ -2,8 +2,8 @@
 
 namespace SqlBuilder\Facade;
 
-use SqlBuilder\Query\InsertQuery;
-use SqlBuilder\Query\SelectQuery;
+use SqlBuilder\Model\Query\InsertQuery;
+use SqlBuilder\Model\Query\SelectQuery;
 
 class Insert
 {

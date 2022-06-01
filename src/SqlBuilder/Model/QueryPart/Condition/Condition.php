@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\QueryPart\Condition;
+namespace SqlBuilder\Model\QueryPart\Condition;
 
 use SqlBuilder\Helpers\SqlHelper;
 

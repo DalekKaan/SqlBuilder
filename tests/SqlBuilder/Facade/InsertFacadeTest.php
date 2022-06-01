@@ -3,9 +3,9 @@
 namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Query\InsertQuery;
-use SqlBuilder\Query\SelectQuery;
-use SqlBuilder\QueryPart\Column\Column;
+use SqlBuilder\Model\Query\InsertQuery;
+use SqlBuilder\Model\Query\SelectQuery;
+use SqlBuilder\Model\QueryPart\Column\Column;
 
 /**
  * Test for InsertFacade

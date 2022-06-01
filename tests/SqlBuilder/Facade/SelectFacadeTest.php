@@ -3,9 +3,9 @@
 namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Query\SelectQuery;
-use SqlBuilder\QueryPart\Column\Column;
-use SqlBuilder\QueryPart\Condition\Condition;
+use SqlBuilder\Model\Query\SelectQuery;
+use SqlBuilder\Model\QueryPart\Column\Column;
+use SqlBuilder\Model\QueryPart\Condition\Condition;
 
 class SelectFacadeTest extends TestCase
 {
