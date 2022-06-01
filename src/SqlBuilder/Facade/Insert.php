@@ -2,33 +2,33 @@
 
 namespace SqlBuilder\Facade;
 
-use SqlBuilder\Insert;
-use SqlBuilder\Select;
+use SqlBuilder\Query\InsertQuery;
+use SqlBuilder\Query\SelectQuery;
 
-class InsertFacade
+class Insert
 {
     /**
      * The `INSERT` statement
-     * @var Insert 
+     * @var InsertQuery 
      */
-    protected Insert $stmt;
+    protected InsertQuery $stmt;
 
     /**
      * @param string $target target
      * @param array|null $columnsNames columns of the target
-     * @param array|Select|SelectFacade|string $data data to insert
+     * @param array|SelectQuery|Select|string $data data to insert
      * @return static
      */
     public static function into(string $target, array $columnsNames = null, $data = null): self {
-        $stmt = new Insert($target);
+        $stmt = new InsertQuery($target);
         $stmt->setColumns($columnsNames);
         
         if ($data!== null) {
             if (is_array($data)) {
                 $stmt->setValues($data);
-            } elseif ($data instanceof Select) {
+            } elseif ($data instanceof SelectQuery) {
                 $stmt->setSelect($data);
-            }elseif ($data instanceof SelectFacade) {
+            }elseif ($data instanceof Select) {
                 $stmt->setSelect($data->getStatement());
             } else {
                 trigger_error("Wrong data type", E_USER_NOTICE);
@@ -39,17 +39,17 @@ class InsertFacade
 
     /**
      * Returns query from this facade
-     * @return Insert
+     * @return InsertQuery
      */
-    public function getStatement(): Insert
+    public function getStatement(): InsertQuery
     {
         return $this->stmt;
     }
 
     /**
-     * @param Insert $stmt the `INSERT` statement
+     * @param InsertQuery $stmt the `INSERT` statement
      */
-    public function __construct(Insert $stmt)
+    public function __construct(InsertQuery $stmt)
     {
         $this->stmt = $stmt;
     }
@@ -65,19 +65,19 @@ class InsertFacade
 
     /**
      * Set select statement
-     * @param Select $select select statement
+     * @param SelectQuery $select select statement
      * @return void
      */
-    public function select(Select $select): void {
+    public function select(SelectQuery $select): void {
         $this->stmt->setSelect($select);
     }
 
     /**
      * Set from select statement
-     * @param Select $select select statement
+     * @param SelectQuery $select select statement
      * @return void
      */
-    public function from(Select $select): void {
+    public function from(SelectQuery $select): void {
         $this->select($select);
     }
 

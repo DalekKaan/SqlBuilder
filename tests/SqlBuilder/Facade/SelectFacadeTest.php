@@ -3,9 +3,9 @@
 namespace SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
+use SqlBuilder\Query\SelectQuery;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Condition\Condition;
-use SqlBuilder\Select;
 
 class SelectFacadeTest extends TestCase
 {
@@ -15,12 +15,12 @@ class SelectFacadeTest extends TestCase
      */
     public function testBuildSql(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
 
         $facade->with([
             'var1' => '152',
             'var2' => 'SomeValue',
-            'subQuery' => new Select("AnotherTable"),
+            'subQuery' => new SelectQuery("AnotherTable"),
         ])
             ->select([
                 "Field1",
@@ -49,30 +49,30 @@ class SelectFacadeTest extends TestCase
      */
     public static function testSelectFrom(): void
     {
-        $facade = SelectFacade::selectFrom("Users");
+        $facade = Select::selectFrom("Users");
         self::assertEquals("SELECT * FROM Users", $facade->buildSql());
 
-        $facade = SelectFacade::selectFrom("Users", "U");
+        $facade = Select::selectFrom("Users", "U");
         self::assertEquals("SELECT * FROM Users AS U", $facade->buildSql());
 
-        $facade = SelectFacade::selectFrom(["Users", "Clients"]);
+        $facade = Select::selectFrom(["Users", "Clients"]);
         self::assertEquals("SELECT * FROM (SELECT * FROM Users) UNION ALL (SELECT * FROM Clients)", $facade->buildSql());
 
-        $facade = SelectFacade::selectFrom([
+        $facade = Select::selectFrom([
             ["Users", "U"],
             ["Clients", "C"]
         ]);
         self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
 
-        $facade = SelectFacade::selectFrom([
-            SelectFacade::selectFrom('Users', 'U'),
-            SelectFacade::selectFrom('Clients', 'C'),
+        $facade = Select::selectFrom([
+            Select::selectFrom('Users', 'U'),
+            Select::selectFrom('Clients', 'C'),
         ]);
         self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
 
-        $facade = SelectFacade::selectFrom([
-            new Select('Users', 'U'),
-            new Select('Clients', 'C'),
+        $facade = Select::selectFrom([
+            new SelectQuery('Users', 'U'),
+            new SelectQuery('Clients', 'C'),
         ]);
         self::assertEquals("SELECT * FROM (SELECT * FROM Users AS U) UNION ALL (SELECT * FROM Clients AS C)", $facade->buildSql());
     }
@@ -83,25 +83,25 @@ class SelectFacadeTest extends TestCase
      */
     public function testCreateSampleQuery(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $this->assertSame(
             "SELECT * FROM ExampleTable",
             $facade->buildSql()
         );
 
-        $facade = new SelectFacade(new Select("ExampleTable", "ET"));
+        $facade = new Select(new SelectQuery("ExampleTable", "ET"));
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
             $facade->buildSql()
         );
 
-        $facade = SelectFacade::selectFrom("ExampleTable");
+        $facade = Select::selectFrom("ExampleTable");
         $this->assertSame(
             "SELECT * FROM ExampleTable",
             $facade->buildSql()
         );
 
-        $facade = SelectFacade::selectFrom("ExampleTable", "ET");
+        $facade = Select::selectFrom("ExampleTable", "ET");
         $this->assertSame(
             "SELECT * FROM ExampleTable AS ET",
             $facade->buildSql()
@@ -113,11 +113,11 @@ class SelectFacadeTest extends TestCase
      */
     public function testWith(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->with([
             'var1' => '152',
             'var2' => 'SomeValue',
-            'subQuery' => new Select("AnotherTable"),
+            'subQuery' => new SelectQuery("AnotherTable"),
         ]);
 
         $this->assertSame(
@@ -131,7 +131,7 @@ class SelectFacadeTest extends TestCase
      */
     public function testSelect(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->select([
             "Field1",
             ["Field2", "F2"],
@@ -149,10 +149,10 @@ class SelectFacadeTest extends TestCase
      */
     public function testJoin(): void
     {
-        $ordersSubqueryFacade = new SelectFacade(new Select("Orders"));
+        $ordersSubqueryFacade = new Select(new SelectQuery("Orders"));
         $ordersSubqueryFacade->where("date BETWEEN '2021-01-01' AND '2021-01-31'");
 
-        $facade = new SelectFacade(new Select("Users", "U"));
+        $facade = new Select(new SelectQuery("Users", "U"));
         $facade->select([
             "U.Login",
             ["D.Name", "Department"],
@@ -160,7 +160,7 @@ class SelectFacadeTest extends TestCase
             ["O.ID", "OrderID"]
         ])
             ->leftJoin("Departments", "D", new Condition('U.DepartmentID', '=', 'D.ID'))
-            ->rightJoin(new Select("Roles"), "R", 'U.RoleID = R.ID')
+            ->rightJoin(new SelectQuery("Roles"), "R", 'U.RoleID = R.ID')
             ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
 
         $this->assertSame(
@@ -174,7 +174,7 @@ class SelectFacadeTest extends TestCase
      */
     public function testWhere(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->where([
             new Condition('Field1', '>', 20),
             ['AND', 'Field2', '=', 15],
@@ -192,7 +192,7 @@ class SelectFacadeTest extends TestCase
      */
     public function testLimit(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->limit(50, 450);
 
         $this->assertSame(
@@ -206,7 +206,7 @@ class SelectFacadeTest extends TestCase
      */
     public function testGroupBy(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->groupBy(['UserID', 'GroupID']);
 
         $this->assertSame(
@@ -220,7 +220,7 @@ class SelectFacadeTest extends TestCase
      */
     public function testHaving(): void
     {
-        $facade = new SelectFacade(new Select("ExampleTable"));
+        $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->groupBy(['UserID', 'GroupID'])
             ->having([
                 ['count(*)', '>', 15],

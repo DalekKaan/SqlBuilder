@@ -3,6 +3,7 @@
 namespace SqlBuilder\Facade;
 
 use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\Query\SelectQuery;
 use SqlBuilder\QueryPart\Column\Column;
 use SqlBuilder\QueryPart\Column\ColumnInterface;
 use SqlBuilder\QueryPart\Condition\ConditionInterface;
@@ -11,7 +12,6 @@ use SqlBuilder\QueryPart\Join\JoinStmtInterface;
 use SqlBuilder\QueryPart\Order\OrderStmt;
 use SqlBuilder\QueryPart\Union\UnionAll;
 use SqlBuilder\QueryPart\With\WithStmt;
-use SqlBuilder\Select;
 
 /**
  * Facade for query.
@@ -61,17 +61,17 @@ use SqlBuilder\Select;
  *  $sql = $queryFacade->buildSql();
  *  ```
  */
-class SelectFacade
+class Select
 {
     /**
      * Query
-     * @var Select
+     * @var SelectQuery
      */
-    protected Select $stmt;
+    protected SelectQuery $stmt;
 
     /**
      * Create facade with new query
-     * @param Select|array|string $from table or sub query
+     * @param SelectQuery|array|string $from table or sub query
      * @param string|null $alias source alias
      * @return static
      */
@@ -80,34 +80,34 @@ class SelectFacade
         if (is_array($from)) {
             $unionData = array_map(static function ($source) {
                 if (is_array($source)) {
-                    return new Select($source[0], $source[1] ?? null);
+                    return new SelectQuery($source[0], $source[1] ?? null);
                 }
                 if ($source instanceof self) {
                     return $source->getStatement();
                 }
-                if ($source instanceof Select) {
+                if ($source instanceof SelectQuery) {
                     return $source;
                 }
-                return new Select($source);
+                return new SelectQuery($source);
             }, $from);
-            return new self(new Select((new UnionAll($unionData))->toSQL()));
+            return new self(new SelectQuery((new UnionAll($unionData))->toSQL()));
         }
-        return new self(new Select($from, $alias));
+        return new self(new SelectQuery($from, $alias));
     }
 
     /**
      * Returns query from this facade
-     * @return Select
+     * @return SelectQuery
      */
-    public function getStatement(): Select
+    public function getStatement(): SelectQuery
     {
         return $this->stmt;
     }
 
     /**
-     * @param Select $query query
+     * @param SelectQuery $query query
      */
-    public function __construct(Select $query)
+    public function __construct(SelectQuery $query)
     {
         $this->stmt = $query;
     }

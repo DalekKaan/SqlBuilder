@@ -2,8 +2,8 @@
 
 namespace SqlBuilder\QueryPart\With;
 
-use SqlBuilder\Facade\SelectFacade;
-use SqlBuilder\Select;
+use SqlBuilder\Facade\Select;
+use SqlBuilder\Query\SelectQuery;
 use SqlBuilder\SqlStatementInterface;
 
 /**
@@ -13,7 +13,7 @@ class WithStmt implements SqlStatementInterface
 {
     /**
      * Data
-     * @var string|integer|Select
+     * @var string|integer|SelectQuery
      */
     protected $data;
 
@@ -24,7 +24,7 @@ class WithStmt implements SqlStatementInterface
     protected string $alias;
 
     /**
-     * @param Select|int|string $data
+     * @param SelectQuery|int|string $data
      * @param string $alias
      */
     public function __construct($data, string $alias)
@@ -38,7 +38,7 @@ class WithStmt implements SqlStatementInterface
      */
     public function toSQL(): string
     {
-        if ($this->data instanceof Select || $this->data instanceof SelectFacade) {
+        if ($this->data instanceof SelectQuery || $this->data instanceof Select) {
             return sprintf("%s AS %s", $this->alias, $this->data);
         }
         return sprintf("%s AS %s", $this->data, $this->alias);

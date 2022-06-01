@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Query;
 
 use SqlBuilder\Helpers\SqlHelper;
 use SqlBuilder\QueryPart\Column\Column;
@@ -9,11 +9,12 @@ use SqlBuilder\QueryPart\Condition\ConditionInterface;
 use SqlBuilder\QueryPart\Join\JoinInterface;
 use SqlBuilder\QueryPart\Order\OrderStmt;
 use SqlBuilder\QueryPart\With\WithStmt;
+use SqlBuilder\SqlStatementInterface;
 
 /**
  * `SELECT` statement
  */
-class Select implements SqlStatementInterface
+class SelectQuery implements SqlStatementInterface
 {
     /**
      * "WITH" statements

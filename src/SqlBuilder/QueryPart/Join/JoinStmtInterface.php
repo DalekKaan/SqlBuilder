@@ -3,8 +3,8 @@
 namespace SqlBuilder\QueryPart\Join;
 
 use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\Query\SelectQuery;
 use SqlBuilder\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\Select;
 
 class JoinStmtInterface implements JoinInterface
 {
@@ -17,7 +17,7 @@ class JoinStmtInterface implements JoinInterface
 
     /**
      * Object to join
-     * @var string|Select
+     * @var string|SelectQuery
      */
     protected $source;
 

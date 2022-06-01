@@ -1,13 +1,14 @@
 <?php
 
-namespace SqlBuilder;
+namespace SqlBuilder\Query;
 
 use SqlBuilder\Helpers\SqlHelper;
+use SqlBuilder\SqlStatementInterface;
 
 /**
  * `INSERT` statement
  */
-class Insert implements SqlStatementInterface
+class InsertQuery implements SqlStatementInterface
 {
     /**
      * Target
@@ -29,9 +30,9 @@ class Insert implements SqlStatementInterface
 
     /**
      * Select to insert
-     * @var Select|null
+     * @var SelectQuery|null
      */
-    protected ?Select $select = null;
+    protected ?SelectQuery $select = null;
 
     /**
      * @param string $target target
@@ -94,10 +95,10 @@ class Insert implements SqlStatementInterface
 
     /**
      * Set select query
-     * @param Select $select
+     * @param SelectQuery $select
      * @return $this
      */
-    public function setSelect(Select $select): self
+    public function setSelect(SelectQuery $select): self
     {
         $this->select = $select;
         return $this;
