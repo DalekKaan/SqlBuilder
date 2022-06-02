@@ -10,7 +10,12 @@
   ],
   "autoload": {
     "psr-4" : {
-      "RibSelezen\\SqlBuilder\\" : ["src", "tests"]
+      "RibSelezen\\SqlBuilder\\" : "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4" : {
+      "RibSelezen\\SqlBuilder\\" : "tests"
     }
   },
   "require": {
