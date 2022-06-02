@@ -8,6 +8,7 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\With\WithInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
@@ -17,7 +18,7 @@ class SelectQuery implements QueryInterface
 {
     /**
      * "WITH" statements
-     * @var WithStatement[]
+     * @var WithInterface[]
      */
     protected array $with = [];
     /**
@@ -94,10 +95,10 @@ class SelectQuery implements QueryInterface
 
     /**
      * Add "WITH" statement
-     * @param WithStatement $with
+     * @param WithInterface $with
      * @return self
      */
-    public function addWith(WithStatement $with): self
+    public function addWith(WithInterface $with): self
     {
         $this->with[] = $with;
         return $this;

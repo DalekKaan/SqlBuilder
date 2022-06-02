@@ -7,7 +7,7 @@ use DalekKaan\SqlBuilder\SQLStatementInterface;
 /**
  * Raw `WITH` statement
  */
-class RawWithStatement implements SQLStatementInterface
+class RawWithStatement implements WithInterface
 {
     /**
      * Raw statement

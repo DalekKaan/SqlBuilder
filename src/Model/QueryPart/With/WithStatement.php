@@ -9,7 +9,7 @@ use DalekKaan\SqlBuilder\SQLStatementInterface;
 /**
  * "With" SQL statement
  */
-class WithStatement implements SQLStatementInterface
+class WithStatement implements WithInterface
 {
     /**
      * Data
