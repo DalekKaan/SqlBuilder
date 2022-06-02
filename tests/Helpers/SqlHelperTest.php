@@ -67,6 +67,10 @@ class SqlHelperTest extends TestCase
             [
                 new Condition("Field", "IN", [1, 2, '3', 4, 5, true]),
                 "(Field IN (1, 2, '3', 4, 5, TRUE))"
+            ],
+            [
+                "myCustomRawCondition = TRUE",
+                "myCustomRawCondition = TRUE"
             ]
         ];
     }
