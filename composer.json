@@ -1,6 +1,6 @@
 {
-  "name": "ribselezen/sqlbuilder",
-  "description": "A simple SQL builder",
+  "name": "dalekkaan/sqlbuilder",
+  "description": "A simple OOP-style SQL builder",
   "version": "0.2",
   "authors": [
     {
