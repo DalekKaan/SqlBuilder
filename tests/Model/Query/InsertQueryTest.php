@@ -5,7 +5,7 @@ namespace DalekKaan\SqlBuilder\Model\Query;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
 use PHPUnit\Framework\TestCase;
 
-class InsertTest extends TestCase
+class InsertQueryTest extends TestCase
 {
     public function testBuildSql(): void
     {
