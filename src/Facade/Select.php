@@ -11,7 +11,9 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Order\RawOrderStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Union\UnionAll;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\RawWithStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithInterface;
@@ -621,10 +623,12 @@ class Select extends AbstractQueryFacade
     public function orderBy(array $fields): self
     {
         foreach ($fields as $field) {
-            if ($field instanceof OrderStatement) {
+            if ($field instanceof OrderInterface) {
                 $this->stmt->addOrderBy($field);
             } elseif (is_array($field)) {
                 $this->stmt->addOrderBy(new OrderStatement($field[0], $field[1] ?? OrderStatement::DIRECTION_ASC));
+            } elseif (is_string($field)) {
+                $this->stmt->addOrderBy(new RawOrderStatement($field));
             } else {
                 $this->stmt->addOrderBy(new OrderStatement($field));
             }

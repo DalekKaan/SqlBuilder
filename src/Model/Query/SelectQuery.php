@@ -7,9 +7,8 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinInterface;
-use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithInterface;
-use DalekKaan\SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * `SELECT` statement
@@ -53,7 +52,7 @@ class SelectQuery implements QueryInterface
 
     /**
      * Order by columns
-     * @var OrderStatement[]
+     * @var OrderInterface[]
      */
     protected array $orderBy = [];
 
@@ -164,10 +163,10 @@ class SelectQuery implements QueryInterface
 
     /**
      * Add order by statement
-     * @param OrderStatement $orderStatement
+     * @param OrderInterface $orderStatement
      * @return self
      */
-    public function addOrderBy(OrderStatement $orderStatement): self
+    public function addOrderBy(OrderInterface $orderStatement): self
     {
         $this->orderBy[] = $orderStatement;
         return $this;

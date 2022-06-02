@@ -3,6 +3,7 @@
 namespace DalekKaan\SqlBuilder\Facade;
 
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\RawWithStatement;
 use PHPUnit\Framework\TestCase;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
@@ -194,6 +195,24 @@ class SelectTest extends TestCase
 
         $this->assertSame(
             "SELECT * FROM ExampleTable WHERE ((Field1 > 20) AND (Field2 = 15) AND (Field3 IN (1, '4', 5, 'str', TRUE)))",
+            $facade->toSql()
+        );
+    }
+
+    /**
+     * Test WITH
+     */
+    public function testOrderBy(): void
+    {
+        $facade = new Select(new SelectQuery("ExampleTable"));
+        $facade->orderBy([
+            new OrderStatement("Name", OrderStatement::DIRECTION_ASC),
+            ['Age', OrderStatement::DIRECTION_DESC],
+            "toDate(UpdatedAt) DESC"
+        ]);
+
+        $this->assertSame(
+            "SELECT * FROM ExampleTable ORDER BY Name ASC, Age DESC, toDate(UpdatedAt) DESC",
             $facade->toSql()
         );
     }

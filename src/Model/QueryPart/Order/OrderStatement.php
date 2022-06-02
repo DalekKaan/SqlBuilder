@@ -2,12 +2,10 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Order;
 
-use DalekKaan\SqlBuilder\SQLStatementInterface;
-
 /**
  * Order statement
  */
-class OrderStatement implements SQLStatementInterface
+class OrderStatement implements OrderInterface
 {
     /**
      * Ordering direction - asc

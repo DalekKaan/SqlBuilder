@@ -4,7 +4,6 @@ namespace DalekKaan\SqlBuilder\Model\QueryPart\With;
 
 use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
-use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
  * "With" SQL statement

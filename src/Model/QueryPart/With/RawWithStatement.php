@@ -2,8 +2,6 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\With;
 
-use DalekKaan\SqlBuilder\SQLStatementInterface;
-
 /**
  * Raw `WITH` statement
  */

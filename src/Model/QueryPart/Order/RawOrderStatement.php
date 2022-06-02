@@ -2,12 +2,10 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Order;
 
-use DalekKaan\SqlBuilder\SQLStatementInterface;
-
 /**
  * Raw `ORDER BY` statement
  */
-class RawOrderStatement implements SQLStatementInterface
+class RawOrderStatement implements OrderInterface
 {
     /**
      * Raw statement
