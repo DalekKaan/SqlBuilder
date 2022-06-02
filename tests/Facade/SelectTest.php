@@ -2,6 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Facade;
 
+use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
 use PHPUnit\Framework\TestCase;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
@@ -162,7 +163,8 @@ class SelectTest extends TestCase
             ->leftJoin("Departments", "D", new Condition('U.DepartmentID', '=', 'D.ID'))
             ->rightJoin(new SelectQuery("Roles"), "R", 'U.RoleID = R.ID')
             ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID')
-            ->crossJoin(new SelectQuery("Roles"), "C");
+            ->crossJoin(new SelectQuery("Groups"), "G")
+            ->rawJoin('ANY LEFT JOIN Posts P ON (P.Author = U.ID)');
 
         $this->assertSame(
             "SELECT U.Login, D.Name AS Department, R.Name AS Role, O.ID AS OrderID "
@@ -170,7 +172,8 @@ class SelectTest extends TestCase
             ."LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) "
             ."RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) "
             ."INNER JOIN (SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31') AS O ON (U.ID = O.UserID) "
-            ."CROSS JOIN (SELECT * FROM Roles) AS C",
+            ."CROSS JOIN (SELECT * FROM Groups) AS G "
+            ."ANY LEFT JOIN Posts P ON (P.Author = U.ID)",
             $facade->toSql()
         );
     }

@@ -10,6 +10,7 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Union\UnionAll;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithStatement;
@@ -371,6 +372,30 @@ class Select extends AbstractQueryFacade
             $table = "({$table->toSQL()})";
         }
         $this->stmt->addJoin(new CrossJoinStatement($table, $as));
+        return $this;
+    }
+
+    /**
+     * Custom joining table or subquery
+     *
+     * **Example:**
+     *
+     * PHP
+     *
+     * ```php
+     * $queryFacade->rawJoin('ANY LEFT JOIN Posts P ON (P.Author = U.ID)')
+     * ```
+     *
+     * Generated SQL
+     * ```sql
+     * ... ANY LEFT JOIN Posts P ON (P.Author = U.ID)
+     * ```
+     * 
+     * @param string $join custom `JOIN` statement
+     * @return self
+     */
+    public function rawJoin(string $join): self {
+        $this->stmt->addJoin(new RawJoinStatement($join));
         return $this;
     }
 
