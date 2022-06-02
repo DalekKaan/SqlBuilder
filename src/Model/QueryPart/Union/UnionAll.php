@@ -1,9 +1,9 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Union;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Union;
 
-use RibSelezen\SqlBuilder\Helpers\SqlHelper;
-use RibSelezen\SqlBuilder\SQLStatementInterface;
+use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
  * `UNION` statement

@@ -10,12 +10,12 @@
   ],
   "autoload": {
     "psr-4" : {
-      "RibSelezen\\SqlBuilder\\" : "src"
+      "DalekKaan\\SqlBuilder\\" : "src"
     }
   },
   "autoload-dev": {
     "psr-4" : {
-      "RibSelezen\\SqlBuilder\\" : "tests"
+      "DalekKaan\\SqlBuilder\\" : "tests"
     }
   },
   "require": {

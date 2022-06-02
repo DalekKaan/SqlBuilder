@@ -1,11 +1,11 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 
-namespace RibSelezen\SqlBuilder\Facade;
+namespace DalekKaan\SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
-use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
-use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
-use RibSelezen\SqlBuilder\Model\QueryPart\Condition\Condition;
+use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
+use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
 
 class SelectFacadeTest extends TestCase
 {

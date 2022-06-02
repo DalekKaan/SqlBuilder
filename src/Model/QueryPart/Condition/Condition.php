@@ -1,8 +1,8 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Condition;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Condition;
 
-use RibSelezen\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SqlHelper;
 
 class Condition implements ConditionInterface
 {

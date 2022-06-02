@@ -1,10 +1,10 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Union;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Union;
 
-use RibSelezen\SqlBuilder\Helpers\SqlHelper;
-use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
-use RibSelezen\SqlBuilder\SQLStatementInterface;
+use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
+use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
  * `UNION` statement

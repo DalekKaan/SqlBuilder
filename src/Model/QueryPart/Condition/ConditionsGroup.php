@@ -1,6 +1,6 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Condition;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Condition;
 
 /**
  * Group of conditions

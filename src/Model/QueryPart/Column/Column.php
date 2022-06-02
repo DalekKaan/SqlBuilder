@@ -1,6 +1,6 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Column;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Column;
 
 /**
  * Column

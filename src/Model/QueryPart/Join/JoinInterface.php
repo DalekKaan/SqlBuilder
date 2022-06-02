@@ -1,8 +1,8 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Join;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Join;
 
-use RibSelezen\SqlBuilder\SQLStatementInterface;
+use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL join

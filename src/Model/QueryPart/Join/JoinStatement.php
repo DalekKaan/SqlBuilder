@@ -1,11 +1,11 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\QueryPart\Join;
+namespace DalekKaan\SqlBuilder\Model\QueryPart\Join;
 
-use RibSelezen\SqlBuilder\Helpers\SqlHelper;
-use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
-use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
-use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
+use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 
 class JoinStatement implements JoinInterface
 {

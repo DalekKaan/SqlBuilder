@@ -1,8 +1,8 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Facade;
+namespace DalekKaan\SqlBuilder\Facade;
 
-use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 
 abstract class AbstractQueryFacade implements QueryInterface
 {

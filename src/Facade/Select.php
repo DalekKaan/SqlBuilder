@@ -1,18 +1,18 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Facade;
+namespace DalekKaan\SqlBuilder\Facade;
 
-use RibSelezen\SqlBuilder\Helpers\SqlHelper;
-use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
-use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
-use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
-use RibSelezen\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
-use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
-use RibSelezen\SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
-use RibSelezen\SqlBuilder\Model\QueryPart\Join\JoinStatement;
-use RibSelezen\SqlBuilder\Model\QueryPart\Order\OrderStatement;
-use RibSelezen\SqlBuilder\Model\QueryPart\Union\UnionAll;
-use RibSelezen\SqlBuilder\Model\QueryPart\With\WithStatement;
+use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
+use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
+use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
+use DalekKaan\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use DalekKaan\SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\Union\UnionAll;
+use DalekKaan\SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * Facade for query.

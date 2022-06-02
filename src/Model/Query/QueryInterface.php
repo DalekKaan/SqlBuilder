@@ -1,8 +1,8 @@
 <?php
 
-namespace RibSelezen\SqlBuilder\Model\Query;
+namespace DalekKaan\SqlBuilder\Model\Query;
 
-use RibSelezen\SqlBuilder\SQLStatementInterface;
+use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL query
