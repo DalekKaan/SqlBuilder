@@ -10,8 +10,7 @@
   ],
   "autoload": {
     "psr-4" : {
-      "SqlBuilder\\" : "src/SqlBuilder",
-      "tests\\" : "tests"
+      "SqlBuilder\\" : "src"
     }
   },
   "require": {
