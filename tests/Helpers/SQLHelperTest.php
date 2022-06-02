@@ -5,7 +5,7 @@ namespace DalekKaan\SqlBuilder\Helpers;
 use PHPUnit\Framework\TestCase;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
 
-class SqlHelperTest extends TestCase
+class SQLHelperTest extends TestCase
 {
     /**
      * @dataProvider getValues
