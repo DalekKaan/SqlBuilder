@@ -13,6 +13,7 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Join\JoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Order\OrderStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\Union\UnionAll;
+use DalekKaan\SqlBuilder\Model\QueryPart\With\RawWithStatement;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\With\WithStatement;
 
@@ -138,6 +139,8 @@ class Select extends AbstractQueryFacade
         foreach ($with as $alias => $data) {
             if ($data instanceof WithInterface) {
                 $this->stmt->addWith($data);
+            } elseif (is_int($alias) && is_string($data)) {
+                $this->stmt->addWith(new RawWithStatement($data));
             } else {
                 $this->stmt->addWith(new WithStatement($data, $alias));
             }

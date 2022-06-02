@@ -3,6 +3,7 @@
 namespace DalekKaan\SqlBuilder\Facade;
 
 use DalekKaan\SqlBuilder\Model\QueryPart\Join\RawJoinStatement;
+use DalekKaan\SqlBuilder\Model\QueryPart\With\RawWithStatement;
 use PHPUnit\Framework\TestCase;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
@@ -118,11 +119,12 @@ class SelectTest extends TestCase
         $facade->with([
             'var1' => '152',
             'var2' => 'SomeValue',
+            "18 AS maxAge",
             'subQuery' => new SelectQuery("AnotherTable"),
         ]);
 
         $this->assertSame(
-            "WITH 152 AS var1, SomeValue AS var2, subQuery AS (SELECT * FROM AnotherTable) SELECT * FROM ExampleTable",
+            "WITH 152 AS var1, SomeValue AS var2, 18 AS maxAge, subQuery AS (SELECT * FROM AnotherTable) SELECT * FROM ExampleTable",
             $facade->toSql()
         );
     }
