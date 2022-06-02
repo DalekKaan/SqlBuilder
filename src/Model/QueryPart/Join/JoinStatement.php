@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Join;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
@@ -63,7 +63,7 @@ class JoinStatement implements JoinInterface
         }
         if ($this->condition) {
             if (is_array($this->condition)) {
-                $out .= " USING (" . SqlHelper::implodeStatements(", ", $this->condition) . ")";
+                $out .= " USING (" . SQLHelper::implodeStatements(", ", $this->condition) . ")";
             } else {
                 $out .= " ON (" . $this->condition->toSQL() . ")";
             }

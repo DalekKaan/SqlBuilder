@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\Query;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
@@ -205,14 +205,14 @@ class SelectQuery implements QueryInterface
 
         if ($this->with) {
             
-            $sqlParts['with'] = "WITH " . SqlHelper::implodeStatements(", ", $this->with);
+            $sqlParts['with'] = "WITH " . SQLHelper::implodeStatements(", ", $this->with);
         }
 
         // prepare columns
         if ($this->columns === null) {
             $columnsStatement = "*";
         } else {
-            $columnsStatement = SqlHelper::implodeStatements(", ", $this->columns);
+            $columnsStatement = SQLHelper::implodeStatements(", ", $this->columns);
         }
         $sqlParts['select'] = "SELECT " . $columnsStatement;
 
@@ -224,7 +224,7 @@ class SelectQuery implements QueryInterface
 
         // prepare joins
         if ($this->joins) {
-            $joinsStatement = SqlHelper::implodeStatements(" ", $this->joins);
+            $joinsStatement = SQLHelper::implodeStatements(" ", $this->joins);
             $sqlParts['joins'] = $joinsStatement;
         }
 
@@ -246,7 +246,7 @@ class SelectQuery implements QueryInterface
 
         // prepare order by
         if ($this->orderBy) {
-            $orderByStatement = SqlHelper::implodeStatements(", ", $this->orderBy);
+            $orderByStatement = SQLHelper::implodeStatements(", ", $this->orderBy);
             $sqlParts['orderBy'] = "ORDER BY " . $orderByStatement;
         }
 

@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Union;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
@@ -29,6 +29,6 @@ class UnionAll implements SQLStatementInterface
      */
     public function toSQL(): string
     {
-        return "(" . SqlHelper::implodeStatements(") UNION ALL (", $this->statements) . ")";
+        return "(" . SQLHelper::implodeStatements(") UNION ALL (", $this->statements) . ")";
     }
 }

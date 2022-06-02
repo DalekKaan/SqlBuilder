@@ -7,7 +7,7 @@ use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
 
-class SelectFacadeTest extends TestCase
+class SelectTest extends TestCase
 {
 
     /**

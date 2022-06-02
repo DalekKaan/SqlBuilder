@@ -11,7 +11,7 @@ use DalekKaan\SqlBuilder\SQLStatementInterface;
 /**
  * SQL helper
  */
-class SqlHelper
+class SQLHelper
 {
     /**
      * Representation of `true` value

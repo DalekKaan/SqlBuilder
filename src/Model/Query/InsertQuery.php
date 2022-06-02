@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\Query;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 
 /**
  * `INSERT` statement
@@ -116,7 +116,7 @@ class InsertQuery implements QueryInterface
         if ($this->select !== null) {
             $sql .= " " . $this->select->toSQL();
         } elseif (count($this->values) > 0) {
-            $values = array_map(static fn($row) => SqlHelper::scalarToSQL($row), $this->values);
+            $values = array_map(static fn($row) => SQLHelper::scalarToSQL($row), $this->values);
             $sql .= " VALUES ". implode(", ", $values);
         } else {
             $sql .= " VALUES ()";

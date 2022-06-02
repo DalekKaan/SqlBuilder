@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Facade;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
@@ -243,7 +243,7 @@ class Select extends AbstractQueryFacade
      */
     public function leftJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("LEFT", $table, $as, SqlHelper::makeCondition($on));
+        return $this->join("LEFT", $table, $as, SQLHelper::makeCondition($on));
     }
 
     /**
@@ -285,7 +285,7 @@ class Select extends AbstractQueryFacade
      */
     public function rightJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("RIGHT", $table, $as, SqlHelper::makeCondition($on));
+        return $this->join("RIGHT", $table, $as, SQLHelper::makeCondition($on));
     }
 
     /**
@@ -327,7 +327,7 @@ class Select extends AbstractQueryFacade
      */
     public function innerJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("INNER", $table, $as, SqlHelper::makeCondition($on));
+        return $this->join("INNER", $table, $as, SQLHelper::makeCondition($on));
     }
 
     /**
@@ -483,7 +483,7 @@ class Select extends AbstractQueryFacade
      */
     public function having($data): self
     {
-        $this->stmt->setHawing(SqlHelper::makeCondition($data));
+        $this->stmt->setHawing(SQLHelper::makeCondition($data));
         return $this;
     }
 
@@ -523,7 +523,7 @@ class Select extends AbstractQueryFacade
      */
     public function where($conditions): self
     {
-        $this->stmt->setWhere(SqlHelper::makeCondition($conditions));
+        $this->stmt->setWhere(SQLHelper::makeCondition($conditions));
         return $this;
     }
 

@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Condition;
 
-use DalekKaan\SqlBuilder\Helpers\SqlHelper;
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 
 class Condition implements ConditionInterface
 {
@@ -42,7 +42,7 @@ class Condition implements ConditionInterface
         $this->leftSide = $leftSide;
         $this->operator = $operator;
         if (is_array($rightSide) && strtoupper(trim($operator)) === "IN") {
-            $rightSide = SqlHelper::scalarToSQL($rightSide);
+            $rightSide = SQLHelper::scalarToSQL($rightSide);
         }
         $this->rightSide = $rightSide;
         $this->joinedBy = $joinedBy;

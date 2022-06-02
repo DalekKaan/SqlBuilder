@@ -13,7 +13,7 @@ class SqlHelperTest extends TestCase
      */
     public function testScalarToSQL($value, $expected): void
     {
-        $out = SqlHelper::scalarToSQL($value);
+        $out = SQLHelper::scalarToSQL($value);
         $this->assertEquals($expected, $out);
     }
 
@@ -54,7 +54,7 @@ class SqlHelperTest extends TestCase
      */
     public function testMakeCondition($condition, $expected): void
     {
-        $this->assertEquals($expected, SqlHelper::makeCondition($condition)->toSQL());
+        $this->assertEquals($expected, SQLHelper::makeCondition($condition)->toSQL());
     }
 
     public function getConditions(): array

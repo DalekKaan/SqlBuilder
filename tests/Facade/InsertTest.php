@@ -10,7 +10,7 @@ use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
 /**
  * Test for InsertFacade
  */
-class InsertFacadeTest extends TestCase
+class InsertTest extends TestCase
 {
     /**
      * Test `into()` method

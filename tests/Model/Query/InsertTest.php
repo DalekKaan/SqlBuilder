@@ -1,11 +1,9 @@
 <?php
 
-namespace DalekKaan\SqlBuilder;
+namespace DalekKaan\SqlBuilder\Model\Query;
 
-use PHPUnit\Framework\TestCase;
-use DalekKaan\SqlBuilder\Model\Query\InsertQuery;
-use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
+use PHPUnit\Framework\TestCase;
 
 class InsertTest extends TestCase
 {
