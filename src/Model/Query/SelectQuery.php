@@ -1,14 +1,14 @@
 <?php
 
-namespace SqlBuilder\Model\Query;
+namespace RibSelezen\SqlBuilder\Model\Query;
 
-use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Model\QueryPart\Column\Column;
-use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
-use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\Model\QueryPart\Join\JoinInterface;
-use SqlBuilder\Model\QueryPart\Order\OrderStatement;
-use SqlBuilder\Model\QueryPart\With\WithStatement;
+use RibSelezen\SqlBuilder\Helpers\SqlHelper;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Join\JoinInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use RibSelezen\SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * `SELECT` statement

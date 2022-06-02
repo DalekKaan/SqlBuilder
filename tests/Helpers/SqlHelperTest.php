@@ -1,9 +1,9 @@
 <?php
 
-namespace SqlBuilder\Helpers;
+namespace RibSelezen\SqlBuilder\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Model\QueryPart\Condition\Condition;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\Condition;
 
 class SqlHelperTest extends TestCase
 {

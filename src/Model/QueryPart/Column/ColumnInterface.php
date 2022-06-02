@@ -1,8 +1,8 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\Column;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\Column;
 
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL column

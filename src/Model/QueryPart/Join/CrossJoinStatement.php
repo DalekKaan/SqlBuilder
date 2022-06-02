@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\Join;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\Join;
 
 /**
  * Cross join

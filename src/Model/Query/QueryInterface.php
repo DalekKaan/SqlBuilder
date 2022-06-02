@@ -1,8 +1,8 @@
 <?php
 
-namespace SqlBuilder\Model\Query;
+namespace RibSelezen\SqlBuilder\Model\Query;
 
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL query

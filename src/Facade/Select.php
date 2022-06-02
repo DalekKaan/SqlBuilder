@@ -1,18 +1,18 @@
 <?php
 
-namespace SqlBuilder\Facade;
+namespace RibSelezen\SqlBuilder\Facade;
 
-use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Model\Query\QueryInterface;
-use SqlBuilder\Model\Query\SelectQuery;
-use SqlBuilder\Model\QueryPart\Column\Column;
-use SqlBuilder\Model\QueryPart\Column\ColumnInterface;
-use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
-use SqlBuilder\Model\QueryPart\Join\JoinStatement;
-use SqlBuilder\Model\QueryPart\Order\OrderStatement;
-use SqlBuilder\Model\QueryPart\Union\UnionAll;
-use SqlBuilder\Model\QueryPart\With\WithStatement;
+use RibSelezen\SqlBuilder\Helpers\SqlHelper;
+use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
+use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\ColumnInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Join\CrossJoinStatement;
+use RibSelezen\SqlBuilder\Model\QueryPart\Join\JoinStatement;
+use RibSelezen\SqlBuilder\Model\QueryPart\Order\OrderStatement;
+use RibSelezen\SqlBuilder\Model\QueryPart\Union\UnionAll;
+use RibSelezen\SqlBuilder\Model\QueryPart\With\WithStatement;
 
 /**
  * Facade for query.

@@ -1,10 +1,10 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\Union;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\Union;
 
-use SqlBuilder\Helpers\SqlHelper;
-use SqlBuilder\Model\Query\QueryInterface;
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\Helpers\SqlHelper;
+use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * `UNION` statement

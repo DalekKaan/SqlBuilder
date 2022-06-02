@@ -1,8 +1,8 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\Order;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\Order;
 
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * Order statement

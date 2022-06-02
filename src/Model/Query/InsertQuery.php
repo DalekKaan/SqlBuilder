@@ -1,8 +1,8 @@
 <?php
 
-namespace SqlBuilder\Model\Query;
+namespace RibSelezen\SqlBuilder\Model\Query;
 
-use SqlBuilder\Helpers\SqlHelper;
+use RibSelezen\SqlBuilder\Helpers\SqlHelper;
 
 /**
  * `INSERT` statement

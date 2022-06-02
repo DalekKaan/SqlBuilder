@@ -1,10 +1,10 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\With;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\With;
 
-use SqlBuilder\Model\Query\QueryInterface;
-use SqlBuilder\Model\Query\SelectQuery;
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\Model\Query\QueryInterface;
+use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * "With" SQL statement

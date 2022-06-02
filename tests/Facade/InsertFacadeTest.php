@@ -1,11 +1,11 @@
 <?php
 
-namespace SqlBuilder\Facade;
+namespace RibSelezen\SqlBuilder\Facade;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Model\Query\InsertQuery;
-use SqlBuilder\Model\Query\SelectQuery;
-use SqlBuilder\Model\QueryPart\Column\Column;
+use RibSelezen\SqlBuilder\Model\Query\InsertQuery;
+use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
 
 /**
  * Test for InsertFacade

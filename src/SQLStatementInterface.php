@@ -1,6 +1,6 @@
 <?php
 
-namespace SqlBuilder;
+namespace RibSelezen\SqlBuilder;
 
 /**
  * SQL statement

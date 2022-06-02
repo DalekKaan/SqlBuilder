@@ -1,8 +1,8 @@
 <?php
 
-namespace SqlBuilder\Model\QueryPart\Condition;
+namespace RibSelezen\SqlBuilder\Model\QueryPart\Condition;
 
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL condition

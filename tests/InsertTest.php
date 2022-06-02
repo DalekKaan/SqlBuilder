@@ -1,11 +1,11 @@
 <?php
 
-namespace SqlBuilder;
+namespace RibSelezen\SqlBuilder;
 
 use PHPUnit\Framework\TestCase;
-use SqlBuilder\Model\Query\InsertQuery;
-use SqlBuilder\Model\Query\SelectQuery;
-use SqlBuilder\Model\QueryPart\Column\Column;
+use RibSelezen\SqlBuilder\Model\Query\InsertQuery;
+use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
+use RibSelezen\SqlBuilder\Model\QueryPart\Column\Column;
 
 class InsertTest extends TestCase
 {

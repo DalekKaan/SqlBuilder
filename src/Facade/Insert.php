@@ -1,9 +1,9 @@
 <?php
 
-namespace SqlBuilder\Facade;
+namespace RibSelezen\SqlBuilder\Facade;
 
-use SqlBuilder\Model\Query\InsertQuery;
-use SqlBuilder\Model\Query\SelectQuery;
+use RibSelezen\SqlBuilder\Model\Query\InsertQuery;
+use RibSelezen\SqlBuilder\Model\Query\SelectQuery;
 
 class Insert extends AbstractQueryFacade
 {

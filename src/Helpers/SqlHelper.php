@@ -1,12 +1,12 @@
 <?php
 
-namespace SqlBuilder\Helpers;
+namespace RibSelezen\SqlBuilder\Helpers;
 
-use SqlBuilder\Model\QueryPart\Condition\Condition;
-use SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
-use SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
-use SqlBuilder\Model\QueryPart\Condition\RawCondition;
-use SqlBuilder\SQLStatementInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\Condition;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
+use RibSelezen\SqlBuilder\Model\QueryPart\Condition\RawCondition;
+use RibSelezen\SqlBuilder\SQLStatementInterface;
 
 /**
  * SQL helper
