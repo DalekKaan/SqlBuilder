@@ -137,11 +137,12 @@ class SQLHelper
      * @param QueryInterface|string $source the string to check
      * @return string
      */
-    public static function wrapDataSource($source): string {
+    public static function wrapDataSource($source): string
+    {
         if ($source instanceof QueryInterface) {
             return "({$source->toSQL()})";
         }
-        if ($source==="") {
+        if ($source === "") {
             return "";
         }
         if (strpos($source, " ") !== false) {
@@ -149,5 +150,5 @@ class SQLHelper
         }
         return $source;
     }
-    
+
 }

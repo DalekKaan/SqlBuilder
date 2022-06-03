@@ -396,11 +396,12 @@ class Select extends AbstractQueryFacade
      * ```sql
      * ... ANY LEFT JOIN Posts P ON (P.Author = U.ID)
      * ```
-     * 
+     *
      * @param string $join custom `JOIN` statement
      * @return self
      */
-    public function rawJoin(string $join): self {
+    public function rawJoin(string $join): self
+    {
         $this->stmt->addJoin(new RawJoinStatement($join));
         return $this;
     }

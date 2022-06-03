@@ -204,7 +204,7 @@ class SelectQuery implements QueryInterface
         // prepare with
 
         if ($this->with) {
-            
+
             $sqlParts['with'] = "WITH " . SQLHelper::implodeStatements(", ", $this->with);
         }
 
