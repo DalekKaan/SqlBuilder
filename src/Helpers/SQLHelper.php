@@ -2,6 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Helpers;
 
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
@@ -130,4 +131,23 @@ class SQLHelper
                 return new Condition($data[1], $data[2], $data[3], $data[0]);
         }
     }
+
+    /**
+     * Is string can be a DB sub query
+     * @param QueryInterface|string $source the string to check
+     * @return string
+     */
+    public static function warpDataSource($source): string {
+        if ($source instanceof QueryInterface) {
+            return "({$source->toSQL()})";
+        }
+        if ($source==="") {
+            return "";
+        }
+        if (strpos($source, " ") !== false) {
+            return "($source)";
+        }
+        return $source;
+    }
+    
 }
