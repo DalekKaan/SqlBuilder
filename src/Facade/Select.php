@@ -88,7 +88,7 @@ class Select extends AbstractQueryFacade
                 if ($source instanceof QueryInterface) {
                     return $source;
                 }
-                return new SelectQuery(SQLHelper::wrapDataSource($source)); // probably useless
+                return new SelectQuery(SQLHelper::wrapDataSource($source));
             }, $from);
             return new self(new SelectQuery((new UnionAll($unionData))->toSQL()));
         }
@@ -245,12 +245,12 @@ class Select extends AbstractQueryFacade
      *
      * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
-     * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
+     * @param string|array|null $on join condition
      * @return self
      */
     public function leftJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("LEFT", $table, $as, SQLHelper::makeCondition($on));
+        return $this->join("LEFT", $table, $as, $on);
     }
 
     /**
@@ -287,12 +287,12 @@ class Select extends AbstractQueryFacade
      *
      * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
-     * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
+     * @param string|array|null $on join condition
      * @return self
      */
     public function rightJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("RIGHT", $table, $as, SQLHelper::makeCondition($on));
+        return $this->join("RIGHT", $table, $as, $on);
     }
 
     /**
@@ -329,12 +329,12 @@ class Select extends AbstractQueryFacade
      *
      * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
-     * @param string|array|null $on join condition. In case of `USING` statement must contain array of filed names,
+     * @param string|array|null $on join condition
      * @return self
      */
     public function innerJoin($table, ?string $as = null, $on = null): self
     {
-        return $this->join("INNER", $table, $as, SQLHelper::makeCondition($on));
+        return $this->join("INNER", $table, $as, $on);
     }
 
     /**
@@ -440,15 +440,12 @@ class Select extends AbstractQueryFacade
      * @param string $type type of join ('LEFT', 'RIGHT', 'INNER', ...)
      * @param string|QueryInterface $table table or subquery
      * @param string|null $as alias of joining table or subquery
-     * @param ConditionInterface|null $on join condition. In case of `USING` statement must contain array of filed names,
+     * @param string|array|null $on join condition
      * @return self
      */
-    public function join(string $type, $table, ?string $as = null, ?ConditionInterface $on = null): self
+    public function join(string $type, $table, ?string $as = null, $on = null): self
     {
-        if ($table instanceof QueryInterface) {
-            $table = "({$table->toSQL()})";
-        }
-        $this->stmt->addJoin(new JoinStatement($type, $table, $as, $on));
+        $this->stmt->addJoin(new JoinStatement($type, SQLHelper::wrapDataSource($table), $as, SQLHelper::makeCondition($on)));
         return $this;
     }
 
