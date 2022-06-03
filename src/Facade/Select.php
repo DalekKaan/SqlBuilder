@@ -88,11 +88,11 @@ class Select extends AbstractQueryFacade
                 if ($source instanceof QueryInterface) {
                     return $source;
                 }
-                return new SelectQuery(SQLHelper::warpDataSource($source)); // probably useless
+                return new SelectQuery(SQLHelper::wrapDataSource($source)); // probably useless
             }, $from);
             return new self(new SelectQuery((new UnionAll($unionData))->toSQL()));
         }
-        return new self(new SelectQuery(SQLHelper::warpDataSource($from), $alias));
+        return new self(new SelectQuery(SQLHelper::wrapDataSource($from), $alias));
     }
 
     /**

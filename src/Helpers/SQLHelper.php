@@ -133,11 +133,11 @@ class SQLHelper
     }
 
     /**
-     * Is string can be a DB sub query
+     * Wrap data source
      * @param QueryInterface|string $source the string to check
      * @return string
      */
-    public static function warpDataSource($source): string {
+    public static function wrapDataSource($source): string {
         if ($source instanceof QueryInterface) {
             return "({$source->toSQL()})";
         }
