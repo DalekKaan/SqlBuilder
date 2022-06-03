@@ -3,6 +3,7 @@
 namespace DalekKaan\SqlBuilder\Facade;
 
 use DalekKaan\SqlBuilder\Model\Query\InsertQuery;
+use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 
 class Insert extends AbstractQueryFacade
@@ -52,19 +53,21 @@ class Insert extends AbstractQueryFacade
     /**
      * Set values
      * @param array $values array of values
-     * @return void
+     * @return self
      */
-    public function values(array $values): void {
+    public function values(array $values): self {
         $this->stmt->setValues($values);
+        return $this;
     }
 
     /**
      * Set select statement
-     * @param SelectQuery $select select statement
-     * @return void
+     * @param QueryInterface $select select statement
+     * @return self
      */
-    public function select(SelectQuery $select): void {
+    public function select(QueryInterface $select): self {
         $this->stmt->setSelect($select);
+        return $this;
     }
 
     /**

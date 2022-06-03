@@ -29,9 +29,9 @@ class InsertQuery implements QueryInterface
 
     /**
      * Select to insert
-     * @var SelectQuery|null
+     * @var QueryInterface|null
      */
-    protected ?SelectQuery $select = null;
+    protected ?QueryInterface $select = null;
 
     /**
      * @param string $target target
@@ -94,10 +94,10 @@ class InsertQuery implements QueryInterface
 
     /**
      * Set select query
-     * @param SelectQuery $select
+     * @param QueryInterface $select
      * @return $this
      */
-    public function setSelect(SelectQuery $select): self
+    public function setSelect(QueryInterface $select): self
     {
         $this->select = $select;
         return $this;

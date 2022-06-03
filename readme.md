@@ -2,7 +2,6 @@
 
 Useful to build some simple SQL queries with php interfaces.
 
-
 ## Usage
 
 ### Select
@@ -10,288 +9,350 @@ Useful to build some simple SQL queries with php interfaces.
 #### General example.
 
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users", "U");
-
-// using `WITH`
-$selectFacade->with([
-    'var1' => '152',
-    'var2' => 'SomeValue',
-    'subQuery' => new Select("AnotherTable"),
-])
-
-// select columns
-    ->select([
-        "UserID",
-        "GroupID",
-        new Column("count(*)", "cnt")
+Select::selectFrom("Users", "U")
+    ->columns([
+        "Name",
+        "Surname",
+        "Age",
+        ["R.Name", "Role"]
     ])
-
-// joining tables
-    ->innerJoin("Posts", "P", "P.UserID = U.ID")
-// with conditions
+    ->innerJoin("Roles", "R", ["R.ID", "=", "U.RoleID"])
     ->where([
-        [
-            ["RegistrationDate", ">", "'2021-09-01'"],
-            ["RegistrationDate", "<", "'2021-09-30'"] // `AND` by default
-        ],
-        [
-            ['GroupID', '=', '313'],
-            ['OR', 'GroupID', '=', '348']
-        ]
+        ["R.ID", 15],
+        ["Surname", "LIKE", "'%son'"]
     ])
-
-// aggregate
-    ->groupBy(["UserID", "GroupID"])
-    ->having([
-        ["count(*)", ">", "10"]
-    ])
-
-// limit, offset
-    ->limit(5, 2);
-
-$sql = $selectFacade->buildSql();
-
-echo $sql;
+    ->toSql();
 ```
-
-The result will look like:
 ```sql
-WITH 152 AS var1,
-    SomeValue AS var2,
-    subQuery AS (SELECT * FROM AnotherTable)
-SELECT UserID,
-       GroupID,
-       count(*) AS cnt
+SELECT Name,
+       Surname,
+       Age,
+       R.Name AS Role
 FROM Users AS U
-         INNER JOIN Posts AS P ON (P.UserID = U.ID)
-WHERE (((RegistrationDate > '2021-09-01') AND (RegistrationDate < '2021-09-30')) AND
-       ((GroupID = 313) OR (GroupID = 348)))
-GROUP BY UserID, GroupID
-HAVING ((count(*) > 10))
-    LIMIT 5 OFFSET 2
+    INNER JOIN Roles AS R ON ((R.ID = U.RoleID))
+WHERE ((R.ID = 15) AND (Surname LIKE '%son'))
 ```
 
 #### Creating queries
-
-Create a simple query to table `Users`:
-
+Creating a simple query to table `Users`:
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users");
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users");
 ```
-It will result in:
 ```sql
 SELECT * FROM Users
 ```
 
-Create a query to table `Users` with alias `U`:
-
+Specifying alias for the table:
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users", "U");
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users", "U")
 ```
-It will result in:
 ```sql
 SELECT * FROM Users AS U
 ```
 
-Create a query to some subquery `Users` with alias `U`:
-
+Using nested queries as source:
 ```php
-$subqueryFacade = new SelectFacade::selectFrom("Users", "U");
-$selectFacade = new SelectFacade(new Select($subqueryFacade, "SQ"));
-$sql = $selectFacade->buildSql();
+Select::selectFrom(
+    Select::selectFrom("Clients"),
+    "U");
 ```
-It will result in:
 ```sql
-SELECT * FROM ((SELECT * FROM Users AS U)) AS SQ
+SELECT * FROM (SELECT * FROM Clients) AS U
+```
+
+You can also use raw nested queries:
+```php
+Select::selectFrom(
+    "SELECT * FROM Clients WHERE AddDate >= '2020-01-01'",
+    "U");
+```
+```sql
+SELECT * FROM (SELECT * FROM Clients WHERE AddDate >= '2020-01-01') AS U
 ```
 
 #### Specifying columns
-
+General example:
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users");
-$selectFacade->select([
-    'Name',
-    25,
-    ['PID', 'ParentID'],
-    'SNN' => "'123-456-789 11'",
-    new Column('Age > 18', 'IsAdult')
-]);
-
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users")
+    ->columns([
+        "Name",
+        "Surname",
+        "Age"
+    ]);
 ```
-It will result in:
 ```sql
-SELECT Name, 25, PID AS ParentID, '123-456-789 11' AS SNN, Age > 18 AS IsAdult FROM Users
+SELECT Name, Surname, Age FROM Users
 ```
 
-#### Joining tables
-
+Using aliases:
 ```php
-$ordersSubqueryFacade = new SelectFacade::selectFrom("Orders");
-$ordersSubqueryFacade->where("date BETWEEN '2021-01-01' AND '2021-01-31'");
-
-$selectFacade = new SelectFacade::selectFrom("Users", "U");
-$selectFacade->select([
-    "U.Login",
-    ["D.Name", "Department"],
-    ["R.Name", "Role"],
-    ["O.ID", "OrderID"]
-])
-    ->leftJoin("Departments", "D", new ConditionStmt('U.DepartmentID', '=', 'D.ID'))
-    ->rightJoin(new Select("Roles"), "R", 'U.RoleID = R.ID')
-    ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID');
-
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users")
+    ->columns([
+        ["Name", "Firstname"],
+        ["Surname", "Lastname"],
+        ["Age > 18", "IsAdult"]
+    ]);
 ```
-It will result in:
 ```sql
-SELECT U.Login,
-       D.Name AS Department,
-       R.Name AS Role,
-       O.ID AS OrderID
-FROM Users AS U
-    LEFT JOIN Departments AS D ON ((U.DepartmentID = D.ID)) 
-    RIGHT JOIN (SELECT * FROM Roles) AS R ON (U.RoleID = R.ID) 
-    INNER JOIN (
-        SELECT * FROM Orders WHERE date BETWEEN '2021-01-01' AND '2021-01-31'
-                             ) AS O ON (U.ID = O.UserID)
+SELECT Name AS Firstname, Surname AS Lastname, Age > 18 AS IsAdult FROM Users
 ```
+
+Or via associative array:
+```php
+Select::selectFrom("Users")
+    ->columns([
+        "Firstname" => "Name",
+        "Lastname" => "Surname",
+        "IsAdult" => "Age > 18"
+    ]);
+```
+```sql
+SELECT Name AS Firstname, Surname AS Lastname, Age > 18 AS IsAdult FROM Users
+```
+
+It can be mixed up:
+```php
+Select::selectFrom("Users")
+    ->columns([
+        "Name",
+        ["Surname", "Lastname"],
+        "IsAdult" => "Age > 18"
+    ]);
+```
+```sql
+SELECT Name, Surname AS Lastname, Age > 18 AS IsAdult FROM Users
+```
+
+#### Joining tables or nested queries
+Joining a table:
+```php
+Select::selectFrom("Users", "U")
+    ->leftJoin("Roles", "R", ['U.RoleID', '=', 'R.ID'])
+```
+```sql
+SELECT * FROM Users AS U LEFT JOIN Roles AS R ON ((U.RoleID = R.ID))
+```
+_Note:_ learn more about conditions in [Adding conditions](#Adding conditions).
+
+Joining nested query:
+```php
+Select::selectFrom("Users", "U")
+    ->leftJoin(
+        Select::selectFrom("Roles"),
+        "R", ['U.RoleID', '=', 'R.ID']);
+```
+```sql
+SELECT * FROM Users AS U LEFT JOIN (SELECT * FROM Roles) AS R ON ((U.RoleID = R.ID))
+```
+
+Or you can use raw nested query string:
+```php
+Select::selectFrom("Users", "U")
+    ->leftJoin(
+        "SELECT * FROM Roles",
+        "R", ['U.RoleID', '=', 'R.ID']);
+```
+```sql
+SELECT * FROM Users AS U LEFT JOIN (SELECT * FROM Roles) AS R ON ((U.RoleID = R.ID))
+```
+
+You can also use `leftJoin`, `rightJoin`, `innerJoin` and `crossJoin` methods.
+
+To specify specific join you should use the `join` method:
+```php
+Select::selectFrom("Users", "U")
+    ->join("FULL OUTER", "Roles", "R", ['U.RoleID', '=', 'R.ID'])
+```
+```sql
+SELECT * FROM Users AS U FULL OUTER JOIN Roles AS R ON ((U.RoleID = R.ID))
+```
+
+You also can specify you own raw `JOIN` statement by using `rawJoin` method:
+```php
+Select::selectFrom("Users", "U")
+    ->rawJoin("ANY LEFT JOIN Roles ON (R.ID NOT IN U.RoleID)");
+```
+```sql
+SELECT * FROM Users AS U ANY LEFT JOIN Roles ON (R.ID NOT IN U.RoleID)
+```
+
 
 #### Adding conditions
-
+Using simple comparative condition:
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users");
-$selectFacade->where([
-    new ConditionStmt('Age', '>', 20),
-    ['AND', 'DepartmentID', '=', 200],
-    new ConditionStmt('SomeProp', 'IN', [1, '4', 5, 'str', true])
-]);
-
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users", "U")
+    ->where(['Age', '>=', 18]);
 ```
-It will result in:
 ```sql
-SELECT * FROM Users WHERE ((Age > 20) AND (DepartmentID = 200) AND (SomeProp IN (1, '4', 5, 'str', TRUE)))
+SELECT * FROM Users AS U WHERE (Age >= 18)
 ```
+
+Using multiple `AND` conditions:
+```php
+Select::selectFrom("Users", "U")
+    ->where([
+        ['Age', '>=', 18],
+        ['Surname', '<>', 'Smith']
+    ]);
+```
+```sql
+SELECT * FROM Users AS U WHERE ((Age >= 18) AND (Surname <> Smith))
+```
+
+Changing logic:
+```php
+Select::selectFrom("Users", "U")
+    ->where([
+        ['Age', '>=', 18],
+        ['OR', 'Surname', '<>', 'Smith']
+    ]);
+```
+```sql
+SELECT * FROM Users AS U WHERE ((Age >= 18) OR (Surname <> Smith))
+```
+
+Using nested conditions:
+```php
+Select::selectFrom("Users", "U")
+    ->where([
+        ['City', '=', 'NY'],
+        [
+            ['Age', '>=', 18],
+            ['OR', 'Surname', '<>', 'Smith']
+        ]
+    ]);
+```
+```sql
+SELECT * FROM Users AS U WHERE ((City = NY) AND ((Age >= 18) OR (Surname <> Smith)))
+```
+
+You can also use your own raw condition string:
+```php
+Select::selectFrom("Users", "U")
+    ->where("(isOdd(Id) AND (Id * Id) > 100)");
+```
+```sql
+SELECT * FROM Users AS U WHERE (isOdd(Id) AND (Id * Id) > 100)
+```
+
+And you can mix it up:
+```php
+Select::selectFrom("Users", "U")
+    ->where([
+        ['City', '=', 'NY'],
+        "(isOdd(Id) AND (Id * Id) > 100)"
+    ])
+```
+```sql
+SELECT * FROM Users AS U WHERE ((City = NY) AND (isOdd(Id) AND (Id * Id) > 100))
+```
+_Note:_ Work in progress.
 
 #### Using aggregation
-
+General example:
 ```php
-$selectFacade = new SelectFacade::selectFrom("Users");
-$selectFacade->select([
-    ['count(*)', 'Cnt'],
-    'DepartmentID',
-    'PositionID',
-])
-    ->groupBy(['DepartmentID', 'PositionID'])
-    ->having([
-        ['count(*)', '>', 15],
-        ['OR', 'count(*)', '<', 10]
-    ]);
-
-$sql = $selectFacade->buildSql();
+Select::selectFrom("Users")
+    ->columns([
+        "RoleID",
+        ["min(Age)", "MinAge"]
+    ])->groupBy(["RoleID"])
 ```
-It will result in:
 ```sql
-SELECT count(*) AS Cnt, DepartmentID, PositionID FROM Users GROUP BY DepartmentID, PositionID HAVING ((count(*) > 15) OR (count(*) < 10))
+SELECT RoleID, min(Age) AS MinAge FROM Users GROUP BY RoleID
+```
+
+Using `HAVING` condition:
+```php
+Select::selectFrom("Users")
+    ->columns([
+        "RoleID",
+        ["min(Age)", "MinAge"]
+    ])->groupBy(["RoleID"])
+    ->having([
+        ['min(Age)', '>', 30]
+    ])
+```
+```sql
+SELECT RoleID, min(Age) AS MinAge FROM Users GROUP BY RoleID HAVING ((min(Age) > 30))
+```
+_Note:_ learn more about conditions in [Adding conditions](#Adding conditions).
+
+#### Using `WITH` statements:
+With nested queries:
+```php
+Select::selectFrom("Users", "U")
+    ->with([
+        "Customers" => Select::selectFrom("Clients")
+            ->where(["Category", "=", 3]),
+        "AdminRoles" => Select::selectFrom("Roles")
+            ->where("IsAdmin")
+    ]);
+```
+```sql
+WITH Customers AS (SELECT * FROM Clients WHERE (Category = 3)),
+     AdminRoles AS (SELECT * FROM Roles WHERE IsAdmin)
+SELECT * FROM Users AS U
+```
+
+Using scalars:
+```php
+Select::selectFrom("Users", "U")
+    ->with([
+        "AdultAge" => 18,
+        "Capital" => "'Washington'"
+    ]);
+```
+```sql
+WITH 18 AS AdultAge,
+    'Washington' AS Capital
+SELECT * FROM Users AS U
+```
+
+You can fix it up:
+```php
+Select::selectFrom("Users", "U")
+    ->with([
+        "AdultAge" => 18,
+        "Capital" => "'Washington'",
+        "Customers" => Select::selectFrom("Clients")
+            ->where(["Category", "=", 3]),
+        "AdminRoles" => Select::selectFrom("Roles")
+            ->where("IsAdmin")
+    ]);
+```
+```sql
+WITH 18 AS AdultAge,
+    'Washington' AS Capital,
+    Customers AS (SELECT * FROM Clients WHERE (Category = 3)),
+    AdminRoles AS (SELECT * FROM Roles WHERE IsAdmin)
+SELECT * FROM Users AS U
 ```
 
 ### Insert
 
-#### General example
-
+Using values
 ```php
-$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age'], [
-    ['Menaal', 'Greenaway', 25],
-    ['Kajus', 'Jensen', 18],
-    ['Lula', 'Perry', 33],
-    ['Chardonnay', 'Ireland', 41],
-    ['Finbar', 'Walls', 29]
-]);
-$sql = $insertFacade->buildSql();
+Insert::into("Users", ["Name", "Surname", "Age"])
+    ->values([
+        ['John', 'Smith', 25],
+        ['Alan', 'Clark']
+    ]);
 ```
-It will result in:
 ```sql
 INSERT INTO Users (Name, Surname, Age)
-VALUES ('Menaal', 'Greenaway', 25),
-       ('Kajus', 'Jensen', 18),
-       ('Lula', 'Perry', 33),
-       ('Chardonnay', 'Ireland', 41),
-       ('Finbar', 'Walls', 29)
+VALUES ('John', 'Smith', 25),
+       ('Alan', 'Clark')
 ```
 
-You can also use `SELECT` subquery.
+Using nested query:
 ```php
-$fromSelect = SelectFacade::selectFrom("Clients")
-    ->select(['Name', 'Surname', 'Age'])
-    ->where(['Age', '>=', 18]);
-$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age'], $fromSelect);
-$sql = $insertFacade->buildSql();
+Insert::into("Users", ["Name", "Surname", "Age"])
+    ->select(
+        Select::selectFrom("Clients")
+            ->columns(["Name", "Surname", "Age"])
+    );
 ```
-It will result in:
-```sql
-INSERT INTO Users (Name, Surname, Age) (SELECT Name, Surname, Age FROM Clients WHERE (Age >= 18))
-```
-
-#### Insert arrays
-
-```php
-$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
-$insertFacade->values([
-    ['Menaal', 'Greenaway', 25],
-    ['Kajus', 'Jensen', 18],
-    ['Lula', 'Perry', 33],
-    ['Chardonnay', 'Ireland', 41],
-    ['Finbar', 'Walls', 29]
-]);
-$sql = $insertFacade->buildSql();
-```
-It will result in:
 ```sql
 INSERT INTO Users (Name, Surname, Age)
-VALUES ('Menaal', 'Greenaway', 25),
-       ('Kajus', 'Jensen', 18),
-       ('Lula', 'Perry', 33),
-       ('Chardonnay', 'Ireland', 41),
-       ('Finbar', 'Walls', 29)
-```
-You can also add rows in loop.
-```php
-$rows = [
-    ['Menaal', 'Greenaway', 25],
-    ['Kajus', 'Jensen', 18],
-    ['Lula', 'Perry', 33],
-    ['Chardonnay', 'Ireland', 41],
-    ['Finbar', 'Walls', 29]
-];
-$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
-foreach ($rows as $row) {
-    $insertFacade->getStatement()->addValues($row);
-}
-$sql = $insertFacade->buildSql();
-```
-It will result in:
-```sql
-INSERT INTO Users (Name, Surname, Age)
-VALUES ('Menaal', 'Greenaway', 25),
-       ('Kajus', 'Jensen', 18),
-       ('Lula', 'Perry', 33),
-       ('Chardonnay', 'Ireland', 41),
-       ('Finbar', 'Walls', 29)
-```
-
-#### Using `SELECT`
-
-```php
-$fromSelect = SelectFacade::selectFrom("Clients")
-    ->select(['Name', 'Surname', 'Age'])
-    ->where(['Age', '>=', 18]);
-$insertFacade = InsertFacadeAlias::into('Users', ['Name', 'Surname', 'Age']);
-$insertFacade->select($fromSelect);
-```
-It will result in:
-```sql
-INSERT INTO Users (Name, Surname, Age) (SELECT Name, Surname, Age FROM Clients WHERE (Age >= 18))
+SELECT Name, Surname, Age FROM Clients
 ```
