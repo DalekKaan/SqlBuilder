@@ -61,16 +61,73 @@ class SQLHelperTest extends TestCase
     {
         return [
             [
-                ["Field", "=", 15],
+                "Field = 10",
+                "Field = 10"
+            ],
+            [
+                new Condition("Field", "=", 10),
+                "(Field = 10)"
+            ],
+            [
+                ["Field"],
+                "(Field = TRUE)"
+            ],
+            [
+                ["Field", 15],
                 "(Field = 15)"
             ],
             [
-                new Condition("Field", "IN", [1, 2, '3', 4, 5, true]),
-                "(Field IN (1, 2, '3', 4, 5, TRUE))"
+                ["Field", '=', 15],
+                "(Field = 15)"
             ],
             [
-                "myCustomRawCondition = TRUE",
-                "myCustomRawCondition = TRUE"
+                ["Field" => 15],
+                "(Field = 15)"
+            ],
+            [
+                ["Field", "IN", "(15, 13, 11)"],
+                "(Field IN (15, 13, 11))"
+            ],
+            [
+                ["Field", "IN", [15, 13, 11]],
+                "(Field IN (15, 13, 11))"
+            ],
+            [
+                ["Field" => [15, 13, 11]],
+                "(Field IN (15, 13, 11))"
+            ],
+            [
+                ["Field", "BETWEEN", "10 AND 17"],
+                "(Field BETWEEN 10 AND 17)"
+            ],
+            [
+                ["Field", "BETWEEN", [10, 17]],
+                "(Field BETWEEN 10 AND 17)"
+            ],
+            
+            [
+                ["Field", ["Field2", "=", 70]],
+                "(Field AND (Field2 = 70))"
+            ],
+            [
+                [["Field", "=", 50], ["Field2", "=", 65]],
+                "((Field = 50) AND (Field2 = 65))"
+            ],
+            [
+                [["Field", "=", 50], "OR", ["Field2", "=", 65]],
+                "((Field = 50) OR (Field2 = 65))"
+            ],
+            [
+                [["Field", "=", 50], ["Field2", "=", 65], ["Field3", "=", 80]],
+                "((Field = 50) AND (Field2 = 65) AND (Field3 = 80))"
+            ],
+            [
+                [["Field", "=", 50], "OR", ["Field2", "=", 65], "OR", ["Field3", "=", 80]],
+                "((Field = 50) OR (Field2 = 65) OR (Field3 = 80))"
+            ],
+            [
+                [["Field", "=", 50], "OR", ["Field2", "=", 65], ["Field3", "=", 80]],
+                "((Field = 50) OR (Field2 = 65) AND (Field3 = 80))"
             ]
         ];
     }
