@@ -2,7 +2,6 @@
 
 namespace DalekKaan\SqlBuilder\Helpers;
 
-use DalekKaan\SqlBuilder\Model\Query\QueryInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
@@ -134,21 +133,21 @@ class SQLHelper
 
     /**
      * Wrap data source
-     * @param QueryInterface|string $source the string to check
+     * @param SQLStatementInterface|string $statement the string to check
      * @return string
      */
-    public static function wrapDataSource($source): string
+    public static function wrap($statement): string
     {
-        if ($source instanceof QueryInterface) {
-            return "({$source->toSQL()})";
+        if ($statement instanceof SQLStatementInterface) {
+            return "({$statement->toSQL()})";
         }
-        if ($source === "") {
+        if ($statement === "") {
             return "";
         }
-        if (strpos($source, " ") !== false) {
-            return "($source)";
+        if (strpos($statement, " ") !== false) {
+            return "($statement)";
         }
-        return $source;
+        return $statement;
     }
 
 }

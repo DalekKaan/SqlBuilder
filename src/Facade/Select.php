@@ -88,11 +88,11 @@ class Select extends AbstractQueryFacade
                 if ($source instanceof QueryInterface) {
                     return $source;
                 }
-                return new SelectQuery(SQLHelper::wrapDataSource($source));
+                return new SelectQuery(SQLHelper::wrap($source));
             }, $from);
             return new self(new SelectQuery((new UnionAll($unionData))->toSQL()));
         }
-        return new self(new SelectQuery(SQLHelper::wrapDataSource($from), $alias));
+        return new self(new SelectQuery(SQLHelper::wrap($from), $alias));
     }
 
     /**
@@ -445,7 +445,7 @@ class Select extends AbstractQueryFacade
      */
     public function join(string $type, $table, ?string $as = null, $on = null): self
     {
-        $this->stmt->addJoin(new JoinStatement($type, SQLHelper::wrapDataSource($table), $as, SQLHelper::makeCondition($on)));
+        $this->stmt->addJoin(new JoinStatement($type, SQLHelper::wrap($table), $as, SQLHelper::makeCondition($on)));
         return $this;
     }
 
