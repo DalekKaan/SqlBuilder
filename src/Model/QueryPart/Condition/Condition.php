@@ -15,15 +15,15 @@ class Condition implements ConditionInterface
 
     /**
      * Left side
-     * @var string|SQLStatementInterface
+     * @var string
      */
-    protected $leftSide;
+    protected string $leftSide;
 
     /**
      * Right side
-     * @var string|SQLStatementInterface
+     * @var string
      */
-    protected $rightSide;
+    protected string $rightSide;
 
     /**
      * Logic for joining to others conditions
@@ -33,30 +33,16 @@ class Condition implements ConditionInterface
 
 
     /**
-     * @param SQLStatementInterface|string $leftSide left side of condition
+     * @param string $leftSide left side of condition
      * @param string $operator
-     * @param SQLStatementInterface|string|array<SQLStatementInterface|string> $rightSide right side of condition
+     * @param string $rightSide right side of condition
      * @param string $joinedBy logic for joining to others conditions
      */
-    public function __construct($leftSide, string $operator, $rightSide, string $joinedBy = "AND")
+    public function __construct(string $leftSide, string $operator, string $rightSide, string $joinedBy = "AND")
     {
-        if (is_array($rightSide) && strtoupper($operator) === "IN") {
-            $this->rightSide = SQLHelper::scalarToSQL($rightSide);
-        } elseif (is_array($rightSide) && strtoupper($operator) === "BETWEEN") {
-            $this->rightSide = SQLHelper::scalarToSQL($rightSide[0]) . " AND " . SQLHelper::scalarToSQL($rightSide[1]);
-        } elseif ($rightSide instanceof SQLStatementInterface) {
-            $this->rightSide = SQLHelper::wrap($rightSide);
-        } else {
-            $this->rightSide = $rightSide;
-        }
-
-        if ($leftSide instanceof SQLStatementInterface) {
-            $this->leftSide = SQLHelper::wrap($leftSide);
-        } else {
-            $this->leftSide = $leftSide;
-        }
-        
+        $this->leftSide = $leftSide;
         $this->operator = $operator;
+        $this->rightSide = $rightSide;
         $this->joinedBy = $joinedBy;
     }
 
