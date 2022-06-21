@@ -8,7 +8,7 @@ use DalekKaan\SqlBuilder\Model\QueryPart\With\RawWithStatement;
 use PHPUnit\Framework\TestCase;
 use DalekKaan\SqlBuilder\Model\Query\SelectQuery;
 use DalekKaan\SqlBuilder\Model\QueryPart\Column\Column;
-use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionModel;
 
 class SelectTest extends TestCase
 {
@@ -31,7 +31,7 @@ class SelectTest extends TestCase
                 new Column("Field3", "F3")
             ])
             ->where([
-                new Condition('Field1', '>', 20),
+                new ConditionModel('Field1', '>', 20),
                 ['AND', 'Field2', '=', 15]
             ])
             ->limit(50, 450)
@@ -163,7 +163,7 @@ class SelectTest extends TestCase
             ["R.Name", "Role"],
             ["O.ID", "OrderID"]
         ])
-            ->leftJoin("Departments", "D", new Condition('U.DepartmentID', '=', 'D.ID'))
+            ->leftJoin("Departments", "D", new ConditionModel('U.DepartmentID', '=', 'D.ID'))
             ->rightJoin(new SelectQuery("Roles"), "R", 'U.RoleID = R.ID')
             ->innerJoin($ordersSubqueryFacade, "O", 'U.ID = O.UserID')
             ->crossJoin(new SelectQuery("Groups"), "G")
@@ -188,9 +188,9 @@ class SelectTest extends TestCase
     {
         $facade = new Select(new SelectQuery("ExampleTable"));
         $facade->where([
-            new Condition('Field1', '>', 20),
+            new ConditionModel('Field1', '>', 20),
             ['AND', 'Field2', '=', 15],
-            new Condition('Field3', 'IN', [1, '4', 5, 'str', true])
+            new ConditionModel('Field3', 'IN', "(1, '4', 5, 'str', TRUE)")
         ]);
 
         $this->assertSame(

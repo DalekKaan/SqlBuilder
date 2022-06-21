@@ -2,7 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Helpers;
 
-use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionModel;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionInterface;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionsGroup;
 use DalekKaan\SqlBuilder\Model\QueryPart\Condition\RawCondition;
@@ -121,13 +121,13 @@ class SQLHelper
             case 0:
                 return new RawCondition("TRUE");
             case 1:
-                return new Condition($data[0], '=', self::VALUE_TRUE);
+                return new ConditionModel($data[0], '=', self::VALUE_TRUE);
             case 2:
-                return new Condition($data[0], '=', $data[1]);
+                return new ConditionModel($data[0], '=', $data[1]);
             case 3:
-                return new Condition($data[0], $data[1], $data[2]);
+                return new ConditionModel($data[0], $data[1], $data[2]);
             default:
-                return new Condition($data[1], $data[2], $data[3], $data[0]);
+                return new ConditionModel($data[1], $data[2], $data[3], $data[0]);
         }
     }
 

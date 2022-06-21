@@ -5,7 +5,10 @@ namespace DalekKaan\SqlBuilder\Model\QueryPart\Condition;
 use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\SQLStatementInterface;
 
-class Condition implements ConditionInterface
+/**
+ * Condition model
+ */
+class ConditionModel implements ConditionInterface
 {
     /**
      * Operator
@@ -60,7 +63,7 @@ class Condition implements ConditionInterface
      */
     public function toSQL(): string
     {
-        return sprintf("%s %s %s", $this->leftSide, $this->operator, $this->rightSide);
+        return implode(" ", [$this->leftSide, $this->operator, $this->rightSide]);
     }
 
 

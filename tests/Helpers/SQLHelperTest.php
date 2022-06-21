@@ -3,7 +3,7 @@
 namespace DalekKaan\SqlBuilder\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use DalekKaan\SqlBuilder\Model\QueryPart\Condition\Condition;
+use DalekKaan\SqlBuilder\Model\QueryPart\Condition\ConditionModel;
 
 class SQLHelperTest extends TestCase
 {
@@ -65,7 +65,7 @@ class SQLHelperTest extends TestCase
                 "Field = 10"
             ],
             [
-                new Condition("Field", "=", 10),
+                new ConditionModel("Field", "=", 10),
                 "(Field = 10)"
             ],
             [

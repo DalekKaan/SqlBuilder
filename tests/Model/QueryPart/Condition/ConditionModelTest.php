@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Condition test
  */
-class ConditionTest extends TestCase
+class ConditionModelTest extends TestCase
 {
     /**
      * @dataProvider getDataSets
@@ -20,7 +20,7 @@ class ConditionTest extends TestCase
      */
     public function testToSQL($left, string $operator, $right, string $expected): void
     {
-        $condition = new Condition($left, $operator, $right);
+        $condition = new ConditionModel($left, $operator, $right);
         self::assertEquals($expected, $condition->toSQL());
     }
 
@@ -32,10 +32,8 @@ class ConditionTest extends TestCase
     {
         return [
             ['Field', '=', 1, 'Field = 1'],
-            ['Field', 'IN', [1, 3, 5], 'Field IN (1, 3, 5)'],
             ['Field', 'IN', '(1, 3, 5)', 'Field IN (1, 3, 5)'],
-            ['Field', 'BETWEEN', [1, 5], 'Field BETWEEN 1 AND 5'],
-            ['Field', 'AND', new Condition('Field2', '=', '2'), 'Field AND (Field2 = 2)']
+            ['Field', 'BETWEEN', '1 AND 5', 'Field BETWEEN 1 AND 5'],
         ];
     }
 
