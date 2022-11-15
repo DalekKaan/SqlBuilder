@@ -2,6 +2,7 @@
 
 namespace DalekKaan\SqlBuilder\Model\QueryPart\Set;
 
+use DalekKaan\SqlBuilder\Helpers\SQLHelper;
 use DalekKaan\SqlBuilder\SQLStatementInterface;
 
 /**
@@ -34,6 +35,6 @@ class SetPairStatement implements SetPairInterface
 
     public function toSQL(): string
     {
-        return sprintf("%s = %s", $this->columnName, $this->value->toSQL());
+        return sprintf("%s = %s", $this->columnName, SQLHelper::wrapDataSource($this->value->toSQL()));
     }
 }
